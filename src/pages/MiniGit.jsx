@@ -34,7 +34,7 @@ export default function MiniGit() {
   };
 
   return (
-    <div className="flex flex-col gap-8 md:gap-12 pt-8 md:pt-16 pb-24 animate-in fade-in duration-700 relative max-w-7xl mx-auto px-4 md:px-6">
+    <div className="flex flex-col gap-8 md:gap-12 pt-24 pb-24 animate-in fade-in duration-700 relative max-w-7xl mx-auto px-4 md:px-6">
       <style>{`
         .mgit-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
         .mgit-scroll::-webkit-scrollbar-track { background: transparent; }
@@ -42,9 +42,6 @@ export default function MiniGit() {
         .mgit-scroll::-webkit-scrollbar-thumb:hover { background: #10b981; }
       `}</style>
       <section className="flex flex-col gap-4">
-        <Link to="/" className="text-slate-400 hover:text-emerald-400 flex items-center gap-2 w-fit mb-2 transition-colors text-sm md:text-base">
-          <ArrowLeft size={16} /> Back to Home
-        </Link>
         <div className="flex flex-col md:flex-row md:items-center gap-4">
           <div className="p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20 w-fit">
             <Terminal className="text-emerald-500" size={32} />

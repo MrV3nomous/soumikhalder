@@ -88,14 +88,8 @@ export default function EngineeringLab() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/5 blur-[120px] rounded-full mix-blend-screen" />
       </div>
 
-      <main className="relative z-10 pt-16 pb-12 px-4 md:px-8 max-w-7xl mx-auto flex flex-col gap-20 w-full">
+      <main className="relative z-10 pt-24 pb-12 px-4 md:px-8 max-w-7xl mx-auto flex flex-col gap-20 w-full">
         
-        <div className="w-full">
-          <Link to="/" className="text-slate-400 hover:text-white flex items-center gap-2 text-sm font-semibold tracking-wide w-fit transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/50 rounded-md px-2 py-1 -ml-2">
-            <ArrowLeft size={16} /> Back
-          </Link>
-        </div>
-
         <section className="flex flex-col gap-6 w-full max-w-4xl">
           <div className="flex items-center gap-3 text-indigo-400 text-xs font-bold uppercase tracking-widest mb-2">
             <FlaskConical size={16} /> Research Archive

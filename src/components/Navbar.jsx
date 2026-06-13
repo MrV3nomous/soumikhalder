@@ -44,7 +44,8 @@ export default function Navbar() {
     { name: 'DevScout', path: '/devscout' },
     { name: 'MiniGit', path: '/minigit' },
     { name: 'Research Lab', path: '/lab' },
-    { name: 'Professional Journey', path: '/journey' }
+    { name: 'Professional Journey', path: '/journey' },
+    { name: 'Contact', path: '/contact' }
   ];
 
   return (

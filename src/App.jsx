@@ -6,6 +6,7 @@ import DevScout from './pages/DevScout';
 import MiniGit from './pages/MiniGit';
 import EngineeringLab from './pages/EngineeringLab';
 import ProfessionalJourney from './pages/ProfessionalJourney';
+import Contact from './pages/Contact';
 
 export default function App() {
   return (
@@ -20,7 +21,8 @@ export default function App() {
           <Route path="/devscout" element={<DevScout />} />
           <Route path="/minigit" element={<MiniGit />} />
           <Route path="/lab" element={<EngineeringLab />} />
-          <Route path="/journey" element={<ProfessionalJourney />} />          
+          <Route path="/journey" element={<ProfessionalJourney />} />
+          <Route path="/contact" element={<Contact />} />          
           <Route path="*" element={<Home />} /> 
         </Routes>
       </main>

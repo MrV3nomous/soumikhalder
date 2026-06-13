@@ -111,17 +111,11 @@ export default function ProfessionalJourney() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/5 blur-[120px] rounded-full" />
       </div>
 
-      <main className="relative z-10 pt-16 pb-20 px-4 md:px-8 max-w-7xl mx-auto flex flex-col gap-16 lg:gap-24 w-full">
-        
-        <div className="w-full">
-          <Link to="/" className="text-slate-400 hover:text-white flex items-center gap-2 text-sm font-semibold tracking-wide w-fit transition-colors group">
-            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Terminal
-          </Link>
-        </div>
+      <main className="relative z-10 pt-24 pb-20 px-4 md:px-8 max-w-7xl mx-auto flex flex-col gap-16 lg:gap-24 w-full">
 
         <section className="flex flex-col gap-6 w-full max-w-5xl">
           <ScrollReveal>
-            <div className="flex items-center gap-3 text-blue-400 text-xs font-bold uppercase tracking-[0.3em] mb-2">
+            <div className="flex items-center gap-3 text-blue-400 text-xs font-bold uppercase pb-4  tracking-[0.3em] mb-2">
               <Compass size={16} /> Chronology
             </div>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.1]">

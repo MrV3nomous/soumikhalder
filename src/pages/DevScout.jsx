@@ -67,23 +67,8 @@ export default function DevScout() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-600/5 blur-[120px] rounded-full mix-blend-screen" />
       </div>
 
-      <main className="relative z-10 pt-16 pb-32 px-4 md:px-8 max-w-7xl mx-auto flex flex-col gap-20 w-full">
+      <main className="relative z-10 pt-24 pb-32 px-4 md:px-8 max-w-7xl mx-auto flex flex-col gap-20 w-full">
         
-        <div className="w-full flex items-center justify-between">
-          <Link to="/" className="text-slate-400 hover:text-white flex items-center gap-2 text-sm w-fit transition-colors">
-            <ArrowLeft size={16} /> Back
-          </Link>
-          {data.liveUrl && (
-            <a 
-              href={data.liveUrl} 
-              target="_blank" 
-              rel="noreferrer" 
-              className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-full text-sm font-bold text-white transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:scale-105"
-            >
-              Launch Live App <ArrowRight size={16} />
-            </a>
-          )}
-        </div>
 
         <section className="flex flex-col items-center text-center mt-4 w-full max-w-5xl mx-auto gap-8">
           <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-blue-500/20 border border-blue-400/50 flex items-center justify-center shadow-[0_0_20px_rgba(37,99,235,0.3)] relative z-10 p-2">
@@ -102,6 +87,19 @@ export default function DevScout() {
               <p className="text-sm md:text-base text-blue-100/80 leading-relaxed font-medium">
                 Most hiring systems evaluate narratives. DevScout evaluates evidence. The platform was designed around the belief that repository history, execution consistency, and technical proof-of-work reveal more than traditional resumes.
               </p>
+        <div className="w-full flex justify-end">
+
+          {data.liveUrl && (
+            <a 
+              href={data.liveUrl} 
+              target="_blank" 
+              rel="noreferrer" 
+              className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-full text-sm font-bold text-white transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:scale-105"
+            >
+              Launch Live App <ArrowRight size={16} />
+            </a>
+          )}
+        </div>
             </div>
           </div>
         </section>
