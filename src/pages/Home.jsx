@@ -237,52 +237,6 @@ export default function Home() {
               </div>
             </div>
           </ScrollReveal>
-          
-          
-          
-          <ScrollReveal delay={200} className="w-full mt-4 relative group/pipeline">
-            <div className="bg-[#05070a]/90 border border-white/10 rounded-[2.5rem] p-8 lg:p-12 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] relative overflow-hidden backdrop-blur-xl transition-all duration-500 hover:border-slate-700/80">
-              
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-900/5 via-transparent to-purple-900/5 opacity-0 group-hover/pipeline:opacity-100 transition-opacity duration-1000"></div>
-
-              <div className="flex flex-col lg:flex-row items-center lg:items-start gap-12 lg:gap-16 relative z-10 w-full">
-                
-                <div className="flex flex-col gap-2 text-center lg:text-left shrink-0 lg:w-48 pt-1">
-                  <h4 className="text-white font-black text-2xl tracking-tight">Data Pipeline</h4>
-                  <span className="text-blue-400 text-[10px] font-bold uppercase tracking-widest flex items-center justify-center lg:justify-start gap-2">
-                    <Activity size={14} className="animate-pulse" /> Real-time Evaluation
-                  </span>
-                </div>
-                
-                <div className="flex flex-col lg:flex-row items-center justify-between w-full relative">
-                  
-                  <div className="absolute top-7 lg:top-8 bottom-7 lg:bottom-auto left-1/2 lg:left-8 right-auto lg:right-8 w-[2px] lg:w-auto h-auto lg:h-[2px] -translate-x-1/2 lg:translate-x-0 bg-slate-800/80 z-0 overflow-hidden rounded-full">
-                     <div className="w-full h-full bg-gradient-to-b lg:bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-0 group-hover/pipeline:opacity-100 transition-opacity duration-1000 animate-[pulse_2s_ease-in-out_infinite]"></div>
-                  </div>
-
-                  {[
-                    { icon: FileCode2, label: "Resume Intake", border: "border-slate-700", text: "text-slate-400", bgGlow: "bg-slate-500/10", shadow: "hover:border-slate-400 hover:shadow-[0_0_20px_rgba(148,163,184,0.2)]" },
-                    { icon: GitBranch, label: "Repository Analysis", border: "border-blue-500/30", text: "text-blue-400", bgGlow: "bg-blue-500/10", shadow: "hover:border-blue-400 hover:shadow-[0_0_20px_rgba(59,130,246,0.3)]" },
-                    { icon: BrainCircuit, label: "AI Evaluation", border: "border-purple-500/30", text: "text-purple-400", bgGlow: "bg-purple-500/10", shadow: "hover:border-purple-400 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]" },
-                    { icon: Target, label: "Candidate Scoring", border: "border-emerald-500/30", text: "text-emerald-400", bgGlow: "bg-emerald-500/10", shadow: "hover:border-emerald-400 hover:shadow-[0_0_20px_rgba(16,185,129,0.3)]" },
-                    { icon: LayoutTemplate, label: "Recruiter Dashboard", border: "border-indigo-500/30", text: "text-indigo-400", bgGlow: "bg-indigo-500/10", shadow: "hover:border-indigo-400 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]" }
-                  ].map((step, idx) => (
-                    <div key={step.label} className="flex flex-col items-center gap-4 relative z-10 group/node w-full lg:w-28">
-                      <div className={`w-14 h-14 lg:w-16 lg:h-16 rounded-2xl bg-[#0a0f1a] border ${step.border} flex items-center justify-center ${step.text} transition-all duration-300 ${step.shadow} group-hover/node:-translate-y-1.5 group-hover/node:scale-110 relative overflow-hidden`}>
-                         <div className={`absolute inset-0 ${step.bgGlow} opacity-50 group-hover/node:opacity-100 transition-opacity`}></div>
-                         <step.icon size={24} className="relative z-10" />
-                      </div>
-                      
-                      <span className="text-slate-400 text-[11px] lg:text-xs font-bold text-center leading-tight transition-colors duration-300 group-hover/node:text-white px-4 lg:px-0">
-                        {step.label}
-                      </span>
-                    </div>
-                  ))}
-
-                </div>
-              </div>
-            </div>
-          </ScrollReveal>
 
         </section>
 
