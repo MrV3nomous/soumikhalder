@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Mail, Download, Link as LinkIcon, Check, Terminal, MapPin, QrCode } from 'lucide-react';
+import { Mail, Download, Link as LinkIcon, Check, Terminal, MapPin, QrCode, Share2 } from 'lucide-react';
 
 export default function Contact() {
   const [copied, setCopied] = useState(false);
@@ -14,6 +14,22 @@ export default function Contact() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleNativeShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Soumik Halder | Software Engineer',
+          text: 'Check out Soumik Halder\'s engineering portfolio and case studies.',
+          url: 'https://soumikhalder.vercel.app/'
+        });
+      } catch (error) {
+        console.log('Share cancelled', error);
+      }
+    } else {
+      handleCopyLink();
+    }
+  };
+
   const handleDownloadCard = () => {
     const link = document.createElement('a');
     link.href = '/social-card.png';
@@ -24,7 +40,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="w-full flex flex-col text-slate-200 font-sans relative min-h-[85vh] pt-24 md:pt-20">
+    <div className="w-full flex flex-col text-slate-200 font-sans relative min-h-[85vh] pt-12 md:pt-20">
       
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-blue-600/10 blur-[120px] rounded-full" />
@@ -48,8 +64,7 @@ export default function Contact() {
         <div className="flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-16 w-full mt-4">
           
           <div className="w-full max-w-lg relative group">
-            <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-3xl blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-700"></div>
-            
+            <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-3xl blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-700"></div>          
             <div className="relative bg-[#05070a] border border-white/10 p-2 rounded-3xl shadow-2xl overflow-hidden transform transition-transform duration-500 group-hover:scale-[1.02]">
               <img 
                 src="/social-card.png" 
@@ -77,6 +92,14 @@ export default function Contact() {
               >
                 <Download size={18} className="group-hover:-translate-y-1 transition-transform" /> 
                 Save Digital Card
+              </button>
+
+              <button 
+                onClick={handleNativeShare}
+                className="w-full px-6 py-4 bg-indigo-500/10 border border-indigo-500/20 hover:bg-indigo-500/20 text-indigo-300 font-bold rounded-xl transition-all flex items-center justify-center gap-3 group"
+              >
+                <Share2 size={18} className="group-hover:scale-110 transition-transform" /> 
+                Share Profile
               </button>
 
               <button 
