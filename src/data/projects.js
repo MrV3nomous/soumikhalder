@@ -47,7 +47,7 @@ export const projects = {
       { name: "Two Brains Flow", path: "/architecture/liedetectorpro.svg" }
     ],
     videos: {
-      demo: { title: "Working Demo", youtubeId: "" }
+      demo: { title: "Working Demo", youtubeId: "-YU-IEItKKU" }
     }
   },
 
@@ -82,7 +82,7 @@ export const projects = {
       { name: "React Architecture", path: "/architecture/krishnaspeaksreact.svg" }
     ],
     videos: {
-      demo: { title: "Working Demo", youtubeId: "" }
+      demo: { title: "Working Demo", youtubeId: "JbLv-0C7rwg" }
     }
   },
 
@@ -97,7 +97,7 @@ export const projects = {
       { name: "Game Loop Architecture", path: "/architecture/poker.svg" }
     ],
     videos: {
-      demo: { title: "4 Rounds Gameplay", youtubeId: "" }
+      demo: { title: "4 Rounds Gameplay", youtubeId: "HSsAn1crk58" }
     }
   },
 
@@ -112,7 +112,7 @@ export const projects = {
       { name: "Rendering Pipeline", path: "/architecture/universeexplorer.svg" }
     ],
     videos: {
-      demo: { title: "Simulation Demo", youtubeId: "" }
+      demo: { title: "Simulation Demo", youtubeId: "mIyY1lwL5R0" }
     }
   },
 
