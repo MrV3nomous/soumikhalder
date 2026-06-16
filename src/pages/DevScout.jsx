@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { 
+import { Copy, Check,
   ArrowLeft, X, ZoomIn, Hand, ChevronLeft, ChevronRight, 
   Fingerprint, PlayCircle, LayoutGrid, Database, Terminal, 
   LayoutDashboard, Swords, Radar, Sliders, Ticket, ShieldCheck, 
@@ -58,7 +58,13 @@ export default function DevScout() {
     if (n.includes('auth')) return <ShieldCheck size={16} className="text-blue-500 shrink-0" />;
     return <FileCode2 size={16} className="text-blue-500 shrink-0" />; 
   };
+  const [copiedItem, setCopiedItem] = useState(null);
 
+  const handleCopy = (text, type) => {
+    navigator.clipboard.writeText(text);
+    setCopiedItem(type);
+    setTimeout(() => setCopiedItem(null), 2000);
+  };
   return (
     <div className="w-full flex flex-col text-slate-200 font-sans selection:bg-blue-500/30 overflow-x-hidden relative animate-in fade-in duration-700">
       
@@ -83,23 +89,39 @@ export default function DevScout() {
             <p className="text-lg md:text-xl text-slate-300 font-light leading-relaxed">
               A full-stack hiring intelligence platform built from scratch. Featuring deep repository telemetry, AI-assisted evaluation, and end-to-end workflow orchestration.
             </p>
-            <div className="bg-blue-900/10 border border-blue-500/20 p-6 rounded-2xl">
+            <div className="bg-blue-900/10 border border-blue-500/20 p-6 md:p-8 rounded-2xl flex flex-col gap-6">
               <p className="text-sm md:text-base text-blue-100/80 leading-relaxed font-medium">
                 Most hiring systems evaluate narratives. DevScout evaluates evidence. The platform was designed around the belief that repository history, execution consistency, and technical proof-of-work reveal more than traditional resumes.
               </p>
-        <div className="w-full flex justify-end">
-
-          {data.liveUrl && (
-            <a 
-              href={data.liveUrl} 
-              target="_blank" 
-              rel="noreferrer" 
-              className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-full text-sm font-bold text-white transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:scale-105"
-            >
-              Launch Live App <ArrowRight size={16} />
-            </a>
-          )}
-        </div>
+              
+              {data.liveUrl && (
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-5 px-4 py-2.5 bg-slate-950/50 border border-slate-800/80 rounded-xl text-xs font-mono shadow-inner w-full lg:w-auto">
+                  <span className="flex items-center gap-2 text-blue-400 font-bold uppercase tracking-wider shrink-0">
+                    <ShieldCheck size={14} /> Demo Access
+                  </span>
+                  <span className="hidden sm:block text-slate-700">|</span>
+                  
+                  <button 
+                    onClick={() => handleCopy('recruiter.devscout.demo@proton.me', 'hero-email')}
+                    className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors group cursor-pointer"
+                    title="Click to copy email"
+                  >
+                    <span className="text-slate-500">E:</span>recruiter.devscout.demo@proton.me
+                    {copiedItem === 'hero-email' ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} className="text-slate-600 group-hover:text-blue-400 transition-colors" />}
+                  </button>
+                  
+                  <span className="hidden sm:block text-slate-700">|</span>
+                  
+                  <button 
+                    onClick={() => handleCopy('Devscout@demo', 'hero-password')}
+                    className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors group cursor-pointer"
+                    title="Click to copy password"
+                  >
+                    <span className="text-slate-500">P:</span>Devscout@demo
+                    {copiedItem === 'hero-password' ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} className="text-slate-600 group-hover:text-blue-400 transition-colors" />}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -149,7 +171,7 @@ export default function DevScout() {
               {[
                 { name: 'React', icon: FileCode2 }, { name: 'Tailwind', icon: LayoutGrid }, { name: 'Framer', icon: Activity },
                 { name: 'Supabase', icon: Database }, { name: 'PostgreSQL', icon: Server }, { name: 'Edge Functions', icon: Terminal },
-                { name: 'Google Gemini', icon: Cpu }, { name: 'GoTrue Auth', icon: ShieldCheck }, { name: 'Stripe Billing', icon: Ticket }
+                { name: 'GROQ API', icon: Cpu }, { name: 'GoTrue Auth', icon: ShieldCheck }, { name: 'Stripe Billing', icon: Ticket }
               ].map((tech) => (
                 <div key={tech.name} className="flex flex-col items-center justify-center gap-2 p-3 bg-slate-950/50 rounded-xl border border-slate-800/50 hover:border-blue-500/30 transition-colors text-center">
                   <tech.icon size={20} className="text-slate-400" />
@@ -343,7 +365,7 @@ export default function DevScout() {
           </div>
         </section>
 
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-16 border-t border-slate-800/50 pt-16 w-full">          
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-16 border-t border-slate-800/50 pt-16 w-full">         
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2 text-rose-500 font-mono text-xs uppercase tracking-widest"><Flame size={16} /> What Broke During Development</div>
             <h3 className="text-2xl font-bold text-white tracking-tight">Interesting Failures</h3>
@@ -405,20 +427,50 @@ export default function DevScout() {
 
           <div className="w-full max-w-md h-[1px] bg-slate-800 z-10 my-2"></div>
 
-          <div className="flex flex-col items-center z-10">
-            <p className="text-xl md:text-2xl font-light text-white mb-6">
+          <div className="flex flex-col items-center z-10 w-full mt-4">
+            <p className="text-xl md:text-2xl font-light text-white mb-8">
               Interested in discussing architecture, engineering decisions, or implementation details?
             </p>
-            <div className="flex flex-wrap gap-4 justify-center">
+            
+            <div className="flex flex-wrap gap-4 justify-center mb-6">
               {data.liveUrl && (
-                <a href={data.liveUrl} target="_blank" rel="noreferrer" className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-full transition-colors shadow-[0_0_20px_rgba(37,99,235,0.4)]">
+                <a href={data.liveUrl} target="_blank" rel="noreferrer" className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-full transition-colors shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:scale-105">
                   Explore App Live
                 </a>
               )}
-              <a href="mailto:soumikhlder@gmail.com" className="px-8 py-3 bg-slate-800 border border-slate-700 hover:bg-slate-700 text-white font-bold rounded-full transition-colors shadow-lg">
+              <a href="mailto:soumikhlder@gmail.com" className="px-8 py-3 bg-slate-800 border border-slate-700 hover:bg-slate-700 text-white font-bold rounded-full transition-colors shadow-lg hover:scale-105">
                 Let's Talk
               </a>
             </div>
+
+            {data.liveUrl && (
+              <div className="flex flex-col sm:flex-row items-center gap-3 md:gap-5 px-4 py-2.5 bg-slate-950/50 border border-slate-800/80 rounded-xl text-xs font-mono shadow-inner w-full lg:w-auto">
+                  <span className="flex items-center gap-2 text-blue-400 font-bold uppercase tracking-wider shrink-0">
+                    <ShieldCheck size={14} /> Demo Access
+                  </span>
+                  <span className="hidden sm:block text-slate-700">|</span>
+                  
+                  <button 
+                    onClick={() => handleCopy('recruiter.devscout.demo@proton.me', 'hero-email')}
+                    className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors group cursor-pointer"
+                    title="Click to copy email"
+                  >
+                    <span className="text-slate-500">E:</span>recruiter.devscout.demo@proton.me
+                    {copiedItem === 'hero-email' ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} className="text-slate-600 group-hover:text-blue-400 transition-colors" />}
+                  </button>
+                  
+                  <span className="hidden sm:block text-slate-700">|</span>
+                  
+                  <button 
+                    onClick={() => handleCopy('Devscout@demo', 'hero-password')}
+                    className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors group cursor-pointer"
+                    title="Click to copy password"
+                  >
+                    <span className="text-slate-500">P:</span>Devscout@demo
+                    {copiedItem === 'hero-password' ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} className="text-slate-600 group-hover:text-blue-400 transition-colors" />}
+                  </button>
+                </div>
+            )}
           </div>
         </section>
 
