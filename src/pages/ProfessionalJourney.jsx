@@ -115,7 +115,7 @@ export default function ProfessionalJourney() {
 
         <section className="flex flex-col gap-6 w-full max-w-5xl">
           <ScrollReveal>
-            <div className="flex items-center gap-3 text-blue-400 text-xs font-bold uppercase pb-4  tracking-[0.3em] mb-2">
+            <div className="flex items-center gap-3 mb-6 text-cyan-400 text-xs font-bold uppercase tracking-widest mb-2 bg-cyan-500/10 w-fit px-4 py-2 rounded-full border border-cyan-500/20 shadow-inner">
               <Compass size={16} /> Chronology
             </div>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.1]">

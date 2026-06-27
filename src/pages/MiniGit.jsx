@@ -42,6 +42,9 @@ export default function MiniGit() {
         .mgit-scroll::-webkit-scrollbar-thumb:hover { background: #10b981; }
       `}</style>
       <section className="flex flex-col gap-4">
+        <div className="flex items-center gap-3 text-cyan-400 ml-2 mb-4 text-xs font-bold uppercase tracking-widest mb-2 bg-cyan-500/10 w-fit px-4 py-2 rounded-full border border-cyan-500/20 shadow-inner">
+          <Terminal size={16} /> Version Control
+        </div>
         <div className="flex flex-col md:flex-row md:items-center gap-4">
           <div className="p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20 w-fit">
             <Terminal className="text-emerald-500" size={32} />
