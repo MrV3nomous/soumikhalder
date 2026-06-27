@@ -14,14 +14,17 @@ export default function Qix() {
         window.scrollTo(0, 0);
     }, []);
 
+    const mainVideo = qix.videos?.miniclips?.[0];
+    const otherVideos = qix.videos?.miniclips?.slice(1) || [];
+
     const allMedia = [];
     if (qix.architectureDiagrams) {
         qix.architectureDiagrams.forEach(d => {
             allMedia.push({ type: 'image', src: d.path, title: d.name });
         });
     }
-    if (qix.videos?.miniclips) {
-        qix.videos.miniclips.forEach(v => {
+    if (otherVideos.length > 0) {
+        otherVideos.forEach(v => {
             if (v.youtubeId) {
                 allMedia.push({ type: 'video', src: v.youtubeId, title: v.title });
             }
@@ -65,9 +68,9 @@ export default function Qix() {
 
             <main className="relative z-10 pt-24 pb-32 px-4 md:px-8 max-w-7xl mx-auto flex flex-col gap-24 w-full">
 
-                <section className="flex flex-col gap-8 w-full max-w-4xl">
+                <section className="flex flex-col gap-12 w-full items-center text-center">
 
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-6 items-center max-w-4xl mx-auto">
                         <div className="flex items-center gap-3 text-cyan-400 text-xs font-bold uppercase tracking-widest mb-2 bg-cyan-500/10 w-fit px-4 py-2 rounded-full border border-cyan-500/20 shadow-inner">
                             <Lock size={16} /> Secure Infrastructure
                         </div>
@@ -79,13 +82,13 @@ export default function Qix() {
                         </p>
                     </div>
 
-                    <div className="flex flex-wrap gap-2 mt-2">
+                    <div className="flex flex-wrap justify-center gap-2 mt-2 max-w-4xl mx-auto">
                         {qix.stack.map(tech => (
                             <span key={tech} className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs font-bold uppercase tracking-widest text-slate-300 shadow-sm">{tech}</span>
                         ))}
                     </div>
 
-                    <div className="flex flex-wrap gap-4 mt-6">
+                    <div className="flex flex-wrap justify-center gap-4 mt-2">
                         <a href={qix.liveUrl} target="_blank" rel="noreferrer" className="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl transition-all shadow-[0_0_30px_rgba(37,99,235,0.4)] flex items-center justify-center gap-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
                             Launch Application <ExternalLink size={18} />
                         </a>
@@ -93,6 +96,21 @@ export default function Qix() {
                             View Source Code <Code2 size={18} />
                         </a>
                     </div>
+
+                    {mainVideo && (
+                        <div className="w-full max-w-5xl mx-auto mt-12 relative group overflow-hidden">
+                            <div className="absolute -inset-1.5 rounded-[2.5rem] blur-xl opacity-20 group-hover:opacity-30 transition duration-1000"></div>
+                            <div className="relative w-full aspect-video rounded-[2rem] overflow-hidden border border-slate-700/50 shadow-2xl bg-black">
+                                <iframe
+                                    src={`https://www.youtube.com/embed/${mainVideo.youtubeId}?autoplay=0&rel=0`}
+                                    title={mainVideo.title}
+                                    className="w-full h-full absolute inset-0 z-10"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                />
+                            </div>
+                        </div>
+                    )}
                 </section>
 
                 <section className="w-full bg-[#05070a]/80 border border-slate-800/60 rounded-[2.5rem] p-8 md:p-16 shadow-2xl backdrop-blur-md relative overflow-hidden">
@@ -276,8 +294,8 @@ export default function Qix() {
 
                                     <div className="absolute bottom-6 left-6 right-6 z-20 flex items-center justify-between">
                                         <span className="text-white font-bold text-lg tracking-tight">{media.title}</span>
-                                        <div className="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center border border-cyan-500/30 group-hover:bg-cyan-500 transition-colors">
-                                            {media.type === 'image' ? <Maximize2 size={16} className="text-cyan-300 group-hover:text-white" /> : <PlayCircle size={16} className="text-cyan-300 group-hover:text-white" />}
+                                        <div className="w-5 h-5 rounded-full bg-cyan-500/20 flex items-center justify-center border border-cyan-500/30 group-hover:bg-cyan-500 transition-colors">
+                                            {media.type === 'image' ? <Maximize2 size={10} className="text-cyan-300 group-hover:text-white" /> : <PlayCircle size={16} className="text-cyan-300 group-hover:text-white" />}
                                         </div>
                                     </div>
                                 </div>

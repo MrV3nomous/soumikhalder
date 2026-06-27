@@ -45,15 +45,14 @@ export const projects = {
     stack: ["React", "Go", "MongoDB", "Redis", "Python", "Chi Router", "Web Crypto API", "TailwindCSS"],
     architectureDiagrams: [
       { name: "Full Architecture", path: "/architecture/qix/qix.svg" },
-      { name: "E2E Encryption & WebSocket Message Flow", path: "/architecture/qix/qixe2ewebsocket.svg" },
+      { name: "E2E Encryption & WebSocket", path: "/architecture/qix/qixe2ewebsocket.svg" },
       { name: "Security & Authentication Lifecycle", path: "/architecture/qix/qixsecurityandauthentication.svg" },
       { name: "Ephemeral Data Lifecycle", path: "/architecture/qix/qixephemeral.svg" },
       { name: "Database Schema & Relationships", path: "/architecture/qix/qixdbrelationsanddata.svg" }
     ],
     videos: {
       miniclips: [
-        { title: "", youtubeId: "" },
-        { title: "", youtubeId: "" }
+        { title: "Qix - How it works", youtubeId: "FVBSAYIzODo" }
       ]
     }
   },
