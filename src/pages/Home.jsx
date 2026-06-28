@@ -9,7 +9,6 @@ import {
 import { projects } from '../data/projects';
 import profileImage from '../assets/me.jpg';
 
-
 const domainThemes = {
   blue: { iconBg: "bg-blue-500/10", iconBorder: "border-blue-500/20", iconText: "text-blue-400", accentBorder: "hover:border-blue-500/30", shadow: "hover:shadow-[0_0_30px_rgba(59,130,246,0.1)]" },
   emerald: { iconBg: "bg-emerald-500/10", iconBorder: "border-emerald-500/20", iconText: "text-emerald-400", accentBorder: "hover:border-emerald-500/30", shadow: "hover:shadow-[0_0_30px_rgba(16,185,129,0.1)]" },
@@ -28,18 +27,10 @@ const statsGrid = [
   { val: "5", label: "Live Deployments", icon: ShieldCheck }
 ];
 
-const progressionSteps = [
-  { title: "Storage & VCS", color: "emerald" },
-  { title: "Security & Crypto", color: "blue" },
-  { title: "Engine Rendering", color: "violet" },
-  { title: "Edge ML", color: "amber" },
-  { title: "DB Triggers & AI", color: "purple" },
-  { title: "Product Systems", color: "indigo" }
-];
-
 const progressionProjects = [
   {
     ...projects.minigit,
+    domain: "Storage & VCS",
     color: 'emerald',
     icon: Terminal,
     desc: "A Git-like version control system built from scratch in Java. Implemented low-level atomic operations, SHA-1 hashing, and Zlib compression.",
@@ -49,6 +40,7 @@ const progressionProjects = [
   },
   {
     ...projects.qix,
+    domain: "Security & Crypto",
     color: 'blue',
     icon: Lock,
     desc: "Zero-knowledge ephemeral communication vault. Architected secure E2E encryption via Web Crypto API, Go WebSockets, and Redis.",
@@ -58,6 +50,7 @@ const progressionProjects = [
   },
   {
     ...projects.universeExplorer,
+    domain: "Engine Rendering",
     color: 'violet',
     icon: Orbit,
     desc: "Procedural world generation using noise algorithms. Implemented high-performance rendering via HTML5 Canvas.",
@@ -67,6 +60,7 @@ const progressionProjects = [
   },
   {
     ...projects.visionDetect,
+    domain: "Edge ML",
     color: 'amber',
     icon: Zap,
     desc: "Client-side object detection using TensorFlow.js. Deployed serverless machine learning for real-time computer vision.",
@@ -76,6 +70,7 @@ const progressionProjects = [
   },
   {
     ...projects.lieDetector,
+    domain: "DB Triggers & AI",
     color: 'purple',
     icon: BrainCircuit,
     desc: "Real-time biometric analysis using PostgreSQL triggers and AI. Fused deterministic databases with edge-function AI interpretation.",
@@ -85,6 +80,7 @@ const progressionProjects = [
   },
   {
     ...projects.krishnaSpeaks,
+    domain: "Product Systems",
     color: 'indigo',
     icon: Network,
     desc: "Retrieval-enhanced conversational architecture with persistent memory. Architected a full-stack chatbot with localized context awareness.",
@@ -116,7 +112,6 @@ const engineeringHighlights = [
   { desc: "Designed AI recruitment platform with deep telemetry analysis.", link: "/devscout", label: "View DevScout" },
   { desc: "Built deterministic AI scoring pipelines using edge computing.", link: "/lab", label: "View Research Lab" }
 ];
-
 
 function ScrollReveal({ children, delay = 0, direction = "up", className = "" }) {
   const [isVisible, setIsVisible] = useState(false);
@@ -154,7 +149,6 @@ function ScrollReveal({ children, delay = 0, direction = "up", className = "" })
     </div>
   );
 }
-
 
 export default function Home() {
   const progressionRef = useRef(null);
@@ -357,16 +351,19 @@ export default function Home() {
                     style={{ height: `${progressionScroll}%` }}
                   ></div>
 
-                  {progressionSteps.map((step, idx) => {
+                  {progressionProjects.map((proj, idx) => {
                     const isActive = idx <= activeProgressionIndex;
                     const isCurrent = idx === activeProgressionIndex;
 
                     return (
-                      <div key={step.title} className="flex items-center gap-5 transition-all duration-500">
+                      <div key={proj.title} className="flex items-center gap-5 transition-all duration-500">
                         <div className={`absolute left-[-6px] w-2.5 h-2.5 rounded-full transition-all duration-500 ${isActive ? 'bg-white shadow-[0_0_12px_white] scale-125' : 'bg-slate-800 scale-100'}`}></div>
-                        <span className={`text-xs font-bold uppercase tracking-widest transition-all duration-500 ${isCurrent ? 'text-white translate-x-2' : isActive ? 'text-slate-400' : 'text-slate-700'}`}>
-                          {step.title}
-                        </span>
+                        <div className={`flex items-center gap-3 transition-all duration-500 ${isCurrent ? 'text-white translate-x-2' : isActive ? 'text-slate-400' : 'text-slate-700'}`}>
+                          <proj.icon size={18} className="shrink-0" />
+                          <span className="text-xs font-bold uppercase tracking-widest">
+                            {proj.title}
+                          </span>
+                        </div>
                       </div>
                     );
                   })}
@@ -394,29 +391,32 @@ export default function Home() {
                     <div className={`absolute -inset-1 rounded-[3rem] blur-lg transition-opacity duration-1000 ${isCurrent ? 'opacity-20' : 'opacity-0'} ${glowColors[proj.color]}`}></div>
 
                     <Link to={getProjectLink(proj)} target={proj.liveUrl || proj.github ? "_blank" : "_self"} className={`relative block overflow-hidden rounded-[2.5rem] border ${isCurrent ? theme.accentBorder : 'border-white/5'} bg-[#05070a]/90 backdrop-blur-xl p-8 md:p-12 flex flex-col shadow-2xl transition-all duration-500 h-full`}>
-                      <div className="flex flex-col gap-6 relative z-10">
 
+                      <proj.icon className="absolute -right-8 -bottom-8 w-64 h-64 text-white opacity-[0.03] rotate-12 pointer-events-none" />
+
+                      <div className="flex flex-col gap-6 relative z-10">
                         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
                           <div className="flex items-center gap-5">
-                            <div className={`w-16 h-16 rounded-2xl ${theme.iconBg} border ${theme.iconBorder} flex items-center justify-center shadow-inner group-hover:rotate-3 group-hover:scale-110 transition-transform duration-500`}>
+                            <div className={`w-16 h-16 rounded-2xl ${theme.iconBg} border ${theme.iconBorder} flex items-center justify-center shadow-inner group-hover:rotate-3 group-hover:scale-110 transition-transform duration-500 relative z-10`}>
                               <proj.icon size={28} className={theme.iconText} />
                             </div>
-                            <div className="flex flex-col">
+                            <div className="flex flex-col relative z-10">
                               <h3 className="text-3xl font-bold text-white tracking-tight">{proj.title}</h3>
-                              <span className={`${theme.iconText} font-bold uppercase tracking-widest text-[10px] mt-1`}>Evolution Phase 0{idx + 1}</span>
+                              {/* Replaced Evolution Phase with the targeted Domain title */}
+                              <span className={`${theme.iconText} font-bold uppercase tracking-widest text-[10px] mt-1`}>{proj.domain}</span>
                             </div>
                           </div>
 
-                          <div className={`hidden md:flex w-12 h-12 rounded-full border items-center justify-center transition-all duration-500 ${isCurrent ? `bg-white/10 ${theme.iconBorder}` : 'bg-white/5 border-white/10'}`}>
+                          <div className={`hidden md:flex w-12 h-12 rounded-full border items-center justify-center transition-all duration-500 relative z-10 ${isCurrent ? `bg-white/10 ${theme.iconBorder}` : 'bg-white/5 border-white/10'}`}>
                             <ArrowRight size={18} className={`text-white transition-transform duration-500 ${isCurrent ? '-rotate-45' : 'group-hover:-rotate-45'}`} />
                           </div>
                         </div>
 
-                        <p className="text-slate-400 text-lg font-medium leading-relaxed mt-2 pr-4">
+                        <p className="text-slate-400 text-lg font-medium leading-relaxed mt-2 pr-4 relative z-10">
                           {proj.desc}
                         </p>
 
-                        <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-white/5">
+                        <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-white/5 relative z-10">
                           <div className="text-sm md:text-base text-slate-300">
                             <span className="font-bold text-white uppercase tracking-wider text-xs mr-2">Problem</span>
                             {proj.problem}
@@ -431,7 +431,7 @@ export default function Home() {
                           </div>
                         </div>
 
-                        <div className="flex items-center justify-between mt-4 pt-8 border-t border-white/5">
+                        <div className="flex items-center justify-between mt-4 pt-8 border-t border-white/5 relative z-10">
                           <div className="flex flex-wrap gap-2">
                             {proj.stack && proj.stack.slice(0, 4).map(tech => (
                               <span key={tech} className="px-3 py-1.5 bg-black/40 border border-white/5 rounded-lg text-[11px] font-bold uppercase tracking-widest text-slate-400">{tech}</span>
