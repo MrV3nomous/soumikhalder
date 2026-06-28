@@ -42,8 +42,8 @@ export default function Navbar() {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'DevScout', path: '/devscout' },
-    { name: 'MiniGit', path: '/minigit' },
     { name: 'Qix', path: '/qix' },
+    { name: 'MiniGit', path: '/minigit' },
     { name: 'Research Lab', path: '/lab' },
     { name: 'Professional Journey', path: '/journey' },
     { name: 'Contact', path: '/contact' }

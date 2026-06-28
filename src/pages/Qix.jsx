@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import {
     ArrowLeft, ExternalLink, Lock, Server, ShieldCheck,
     Trash2, Database, Network, Key, Cpu, Globe, Code2,
-    Terminal, PlayCircle, Maximize2, Hand, X, ChevronLeft, ChevronRight, ArrowRight
+    Terminal, PlayCircle, Maximize2, Hand, X, ChevronLeft, ChevronRight, ArrowRight,
+    Zap, UserX, Timer, EyeOff
 } from 'lucide-react';
 import { projects } from '../data/projects';
 
@@ -14,6 +15,7 @@ export default function Qix() {
         window.scrollTo(0, 0);
     }, []);
 
+    // Extract the main video to highlight it separately
     const mainVideo = qix.videos?.miniclips?.[0];
     const otherVideos = qix.videos?.miniclips?.slice(1) || [];
 
@@ -71,15 +73,22 @@ export default function Qix() {
                 <section className="flex flex-col gap-12 w-full items-center text-center">
 
                     <div className="flex flex-col gap-6 items-center max-w-4xl mx-auto">
-                        <div className="flex items-center gap-3 text-cyan-400 text-xs font-bold uppercase tracking-widest mb-2 bg-cyan-500/10 w-fit px-4 py-2 rounded-full border border-cyan-500/20 shadow-inner">
-                            <Lock size={16} /> Secure Infrastructure
+                        <div className="relative w-28 h-28 mb-4 animate-fade-in-up">
+                            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500 to-violet-500 blur-2xl opacity-40 rounded-[2rem] animate-pulse"></div>
+                            <img src="/qixlogo.png" alt="Qix Logo" className="w-full h-full object-contain relative z-10 rounded-[2rem] border border-white/10 shadow-2xl" />
                         </div>
+
                         <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight leading-[1.05]">
                             {qix.title}
                         </h1>
                         <p className="text-xl md:text-2xl text-slate-400 font-medium leading-relaxed max-w-3xl">
                             {qix.tagline}
                         </p>
+                    </div>
+
+
+                    <div className="flex items-center gap-3 text-cyan-400 text-xs font-bold uppercase tracking-widest bg-cyan-500/10 w-fit px-4 py-2 rounded-full border border-cyan-500/20 shadow-inner">
+                        <Lock size={16} /> Secure Infrastructure
                     </div>
 
                     <div className="flex flex-wrap justify-center gap-2 mt-2 max-w-4xl mx-auto">
@@ -98,8 +107,8 @@ export default function Qix() {
                     </div>
 
                     {mainVideo && (
-                        <div className="w-full max-w-5xl mx-auto mt-12 relative group overflow-hidden">
-                            <div className="absolute -inset-1.5 rounded-[2.5rem] blur-xl opacity-20 group-hover:opacity-30 transition duration-1000"></div>
+                        <div className="w-full max-w-5xl mx-auto mt-12 relative group">
+                            <div className="absolute -inset-1.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-[2.5rem] blur-xl opacity-20 group-hover:opacity-30 transition duration-1000"></div>
                             <div className="relative w-full aspect-video rounded-[2rem] overflow-hidden border border-slate-700/50 shadow-2xl bg-black">
                                 <iframe
                                     src={`https://www.youtube.com/embed/${mainVideo.youtubeId}?autoplay=0&rel=0`}
@@ -113,19 +122,49 @@ export default function Qix() {
                     )}
                 </section>
 
-                <section className="w-full bg-[#05070a]/80 border border-slate-800/60 rounded-[2.5rem] p-8 md:p-16 shadow-2xl backdrop-blur-md relative overflow-hidden">
+                {/* Frictionless Communication Section */}
+                <section className="w-full bg-[#05070a]/80 border border-slate-800/60 rounded-[2.5rem] p-8 md:p-12 lg:p-16 shadow-2xl backdrop-blur-md relative overflow-hidden flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
                     <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 blur-[120px] rounded-full pointer-events-none"></div>
-                    <div className="flex flex-col gap-6 relative z-10 max-w-4xl">
-                        <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight">Frictionless Secure Communication</h2>
+
+                    <div className="flex-1 flex flex-col gap-6 relative z-10">
+                        <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight flex items-center gap-3">
+                            <Zap className="text-cyan-400 shrink-0" size={36} />
+                            Frictionless Secure Communication
+                        </h2>
                         <p className="text-lg text-slate-300 leading-relaxed font-medium">
-                            Qix eliminates the barriers inherent in modern encrypted messaging. It requires no phone numbers, no account creation, and no app downloads, while ensuring absolutely zero persistent chat history.
+                            Qix eliminates the barriers inherent in modern encrypted messaging. It requires <strong className="text-white font-bold drop-shadow-md">no phone numbers</strong>, <strong className="text-white font-bold drop-shadow-md">no account creation</strong>, and <strong className="text-white font-bold drop-shadow-md">no app downloads</strong>, while ensuring absolutely zero persistent chat history.
                         </p>
                         <p className="text-lg text-slate-300 leading-relaxed font-medium">
                             Users generate a secure vault, share an ephemeral session link, and conduct sensitive communication. Upon completion, the vault and all associated metadata are mathematically and physically eradicated from the infrastructure.
                         </p>
+
+                        <div className="flex flex-wrap gap-4 mt-4">
+                            <div className="flex items-center gap-2.5 bg-slate-900/80 border border-slate-700/50 px-5 py-2.5 rounded-xl shadow-lg backdrop-blur-sm">
+                                <UserX className="text-rose-400" size={18} />
+                                <span className="text-sm font-bold tracking-wide text-slate-200">No Signup</span>
+                            </div>
+                            <div className="flex items-center gap-2.5 bg-slate-900/80 border border-slate-700/50 px-5 py-2.5 rounded-xl shadow-lg backdrop-blur-sm">
+                                <Timer className="text-amber-400" size={18} />
+                                <span className="text-sm font-bold tracking-wide text-slate-200">Ephemeral</span>
+                            </div>
+                            <div className="flex items-center gap-2.5 bg-slate-900/80 border border-slate-700/50 px-5 py-2.5 rounded-xl shadow-lg backdrop-blur-sm">
+                                <EyeOff className="text-blue-400" size={18} />
+                                <span className="text-sm font-bold tracking-wide text-slate-200">Zero Trail</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="relative w-48 h-48 md:w-72 md:h-72 shrink-0 group perspective-1000 hidden sm:block">
+                        <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500 to-violet-500 rounded-[2.5rem] blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-700"></div>
+                        <img
+                            src="/qixlogo.png"
+                            alt="Qix App Icon"
+                            className="w-full h-full object-cover rounded-[2.5rem] relative z-10 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-700 [transform:perspective(1000px)_rotateY(-15deg)_rotateX(10deg)] group-hover:[transform:perspective(1000px)_rotateY(0deg)_rotateX(0deg)]"
+                        />
                     </div>
                 </section>
 
+                {/* Zero Knowledge Architecture Section */}
                 <section className="flex flex-col gap-8 w-full mt-8">
                     <div className="flex flex-col gap-2 mb-2 max-w-3xl">
                         <span className="text-cyan-400 text-xs font-bold uppercase tracking-widest flex items-center gap-2"><Key size={16} /> The Cryptographic Core</span>
@@ -159,6 +198,7 @@ export default function Qix() {
                     </div>
                 </section>
 
+                {/* Microservices Section */}
                 <section className="flex flex-col gap-8 w-full mt-12">
                     <div className="flex flex-col gap-2 mb-2 max-w-3xl">
                         <span className="text-blue-400 text-xs font-bold uppercase tracking-widest flex items-center gap-2"><Network size={16} /> System Design</span>
@@ -232,6 +272,7 @@ export default function Qix() {
                     </div>
                 </section>
 
+                {/* Ephemerality Section */}
                 <section className="flex flex-col gap-8 w-full mt-12 border-t border-slate-800/60 pt-16">
                     <div className="flex flex-col gap-2 mb-2 text-center items-center max-w-2xl mx-auto">
                         <span className="text-emerald-400 text-xs font-bold uppercase tracking-widest bg-emerald-500/10 px-4 py-2 rounded-full border border-emerald-500/20">Data Destruction</span>
@@ -268,6 +309,7 @@ export default function Qix() {
                     </div>
                 </section>
 
+                {/* Architecture Gallery */}
                 {allMedia.length > 0 && (
                     <section className="flex flex-col gap-8 w-full mt-16 pt-16 border-t border-slate-800/60">
                         <div className="flex flex-col gap-2 mb-2">
@@ -306,6 +348,7 @@ export default function Qix() {
 
             </main>
 
+            {/* Lightbox for Gallery */}
             {activeMedia && (
                 <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/95 backdrop-blur-2xl p-0 md:p-8 animate-in fade-in duration-300" onClick={() => setActiveIndex(null)}>
 

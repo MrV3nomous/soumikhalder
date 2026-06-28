@@ -129,22 +129,6 @@ export default function EngineeringLab() {
                 <p className="text-slate-400 text-sm font-medium leading-relaxed relative z-10">{phase.desc}</p>
               </div>
             ))}
-
-            <div className="md:col-span-2 lg:col-span-3 bg-blue-600/10 border border-blue-500/40 p-6 lg:p-8 rounded-3xl flex flex-col lg:flex-row lg:items-center justify-between gap-6 group transition-all duration-300 relative overflow-hidden shadow-[0_0_30px_rgba(37,99,235,0.15)] hover:bg-blue-600/20">
-              <div className="absolute inset-0 bg-blue-500/20 blur-[50px] pointer-events-none"></div>
-              <div className="flex flex-col gap-3 relative z-10">
-                <div className="flex items-center gap-3 mb-1">
-                  <div className="p-2 rounded-xl bg-blue-500/20 border border-blue-400/50"><Target size={16} className="text-white" /></div>
-                  <span className="text-blue-200 text-[10px] font-bold uppercase tracking-widest">July, 2026</span>
-                </div>
-                <h4 className="text-2xl lg:text-3xl font-black text-white tracking-tight">DevScout Architecture</h4>
-                <p className="text-blue-100/80 text-sm font-medium leading-relaxed max-w-2xl">The synthesis of 6 domains of foundational research into one cohesive enterprise-grade platform.</p>
-              </div>
-              <Link to="/devscout" className="relative z-10 w-fit px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold rounded-xl transition-all flex items-center gap-2 whitespace-nowrap">
-                View Platform <ArrowRight size={16} />
-              </Link>
-            </div>
-
           </div>
         </section>
 

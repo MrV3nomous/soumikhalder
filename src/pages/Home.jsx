@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight, Terminal, Activity, Target, GitBranch,
-  BrainCircuit, Orbit, Compass, Zap, Check, Mail, LayoutTemplate, Code2,
-  ShieldCheck, ChevronRight, Rocket, FileCode2, Network,
+  BrainCircuit, Orbit, Compass, Zap, Check, Mail, Code2,
+  ShieldCheck, Rocket, FileCode2, Network,
   FileSearch, PlayCircle, Scale, Lock
 } from 'lucide-react';
 import { projects } from '../data/projects';
 import profileImage from '../assets/me.jpg';
+
 
 const domainThemes = {
   blue: { iconBg: "bg-blue-500/10", iconBorder: "border-blue-500/20", iconText: "text-blue-400", accentBorder: "hover:border-blue-500/30", shadow: "hover:shadow-[0_0_30px_rgba(59,130,246,0.1)]" },
@@ -18,6 +19,105 @@ const domainThemes = {
   amber: { iconBg: "bg-amber-500/10", iconBorder: "border-amber-500/20", iconText: "text-amber-400", accentBorder: "hover:border-amber-500/30", shadow: "hover:shadow-[0_0_30px_rgba(245,158,11,0.1)]" }
 };
 
+const featuredTech = ['JavaScript', 'React', 'Node.js', 'Java', 'MongoDB', 'Redis', 'Tailwind CSS', 'PostgreSQL', 'Docker', 'GOLANG', 'Linux'];
+
+const statsGrid = [
+  { val: "7", label: "Independent Systems Built", icon: Rocket },
+  { val: "20+", label: "Architecture Documents", icon: FileCode2 },
+  { val: "50+", label: "Technical Experiments", icon: Activity },
+  { val: "5", label: "Live Deployments", icon: ShieldCheck }
+];
+
+const progressionSteps = [
+  { title: "Storage & VCS", color: "emerald" },
+  { title: "Security & Crypto", color: "blue" },
+  { title: "Engine Rendering", color: "violet" },
+  { title: "Edge ML", color: "amber" },
+  { title: "DB Triggers & AI", color: "purple" },
+  { title: "Product Systems", color: "indigo" }
+];
+
+const progressionProjects = [
+  {
+    ...projects.minigit,
+    color: 'emerald',
+    icon: Terminal,
+    desc: "A Git-like version control system built from scratch in Java. Implemented low-level atomic operations, SHA-1 hashing, and Zlib compression.",
+    problem: "Reliance on black-box version control tools.",
+    solution: "Engineered a custom VCS interpreting raw bytes.",
+    impact: "Mastered low-level data compression and integrity."
+  },
+  {
+    ...projects.qix,
+    color: 'blue',
+    icon: Lock,
+    desc: "Zero-knowledge ephemeral communication vault. Architected secure E2E encryption via Web Crypto API, Go WebSockets, and Redis.",
+    problem: "Sensitive communications require absolute server-side trust.",
+    solution: "Browser-controlled zero-knowledge encryption architecture.",
+    impact: "Server mathematically cannot access plaintext data."
+  },
+  {
+    ...projects.universeExplorer,
+    color: 'violet',
+    icon: Orbit,
+    desc: "Procedural world generation using noise algorithms. Implemented high-performance rendering via HTML5 Canvas.",
+    problem: "Static digital environments lack organic replayability.",
+    solution: "Simulated natural generation using deterministic noise functions.",
+    impact: "High-performance procedural rendering on the client."
+  },
+  {
+    ...projects.visionDetect,
+    color: 'amber',
+    icon: Zap,
+    desc: "Client-side object detection using TensorFlow.js. Deployed serverless machine learning for real-time computer vision.",
+    problem: "Server-side ML inference causes high latency and costs.",
+    solution: "Distributed execution of models directly in the user browser.",
+    impact: "Achieved real-time serverless visual processing."
+  },
+  {
+    ...projects.lieDetector,
+    color: 'purple',
+    icon: BrainCircuit,
+    desc: "Real-time biometric analysis using PostgreSQL triggers and AI. Fused deterministic databases with edge-function AI interpretation.",
+    problem: "Need for rapid forensic data visualization.",
+    solution: "Real-time analysis pipeline leveraging edge computing.",
+    impact: "Bridged strict database triggers with generative AI logic."
+  },
+  {
+    ...projects.krishnaSpeaks,
+    color: 'indigo',
+    icon: Network,
+    desc: "Retrieval-enhanced conversational architecture with persistent memory. Architected a full-stack chatbot with localized context awareness.",
+    problem: "Standard conversational bots lack localized context and memory.",
+    solution: "Designed a multi-stage retrieval augmented pipeline.",
+    impact: "Enabled persistent entity memory and context-aware routing."
+  }
+];
+
+const caseStudyFeatures = [
+  { text: "20+ Architecture Diagrams", icon: Network },
+  { text: "20+ Live Demo Videos", icon: PlayCircle },
+  { text: "Implementation Walkthroughs", icon: GitBranch },
+  { text: "Technical Trade-offs", icon: Scale },
+  { text: "Source Code References", icon: FileSearch }
+];
+
+const philosophyCards = [
+  { title: "Design for Failure", desc: "Systems should degrade gracefully. I architect with edge cases and fallbacks as primary requirements." },
+  { title: "Make Complexity Visible", desc: "Architecture decisions must be documented and transparent, never hidden behind 'magic' frameworks." },
+  { title: "Build From Fundamentals", desc: "Understanding primitives creates better abstractions. I build from scratch to master the lower levels." }
+];
+
+const getProjectLink = (proj) => proj.liveUrl || proj.github || '/lab';
+
+const engineeringHighlights = [
+  { desc: "Built a Git-like VCS from scratch in Java.", link: getProjectLink(projects.minigit), label: "View MiniGit" },
+  { desc: "Architected a zero-knowledge communication vault in Go.", link: "/qix", label: "View Qix" },
+  { desc: "Designed AI recruitment platform with deep telemetry analysis.", link: "/devscout", label: "View DevScout" },
+  { desc: "Built deterministic AI scoring pipelines using edge computing.", link: "/lab", label: "View Research Lab" }
+];
+
+
 function ScrollReveal({ children, delay = 0, direction = "up", className = "" }) {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef(null);
@@ -27,7 +127,7 @@ function ScrollReveal({ children, delay = 0, direction = "up", className = "" })
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          observer.unobserve(entry.target);
+          observer.disconnect();
         }
       },
       { rootMargin: "0px 0px -10% 0px", threshold: 0.05 }
@@ -45,7 +145,7 @@ function ScrollReveal({ children, delay = 0, direction = "up", className = "" })
       className={className}
       style={{
         opacity: isVisible ? 1 : 0,
-        transform: isVisible ? 'translate3d(0, 0, 0)' : `translate3d(${xOffset}px, ${yOffset}px, 0)`,
+        transform: isVisible ? `translate3d(0, 0, 0)` : `translate3d(${xOffset}px, ${yOffset}px, 0)`,
         transition: `opacity 1s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 1s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
         willChange: 'opacity, transform'
       }}
@@ -55,8 +155,8 @@ function ScrollReveal({ children, delay = 0, direction = "up", className = "" })
   );
 }
 
-export default function Home() {
 
+export default function Home() {
   const progressionRef = useRef(null);
   const [progressionScroll, setProgressionScroll] = useState(0);
   const [activeProgressionIndex, setActiveProgressionIndex] = useState(0);
@@ -66,11 +166,19 @@ export default function Home() {
       if (progressionRef.current) {
         const { top, height } = progressionRef.current.getBoundingClientRect();
         const windowHeight = window.innerHeight;
-        const scrolled = (windowHeight / 2) - top;
-        let percentage = (scrolled / height) * 100;
-        setProgressionScroll(Math.max(0, Math.min(100, percentage)));
-        let newIndex = Math.floor((percentage / 100) * 6);
-        setActiveProgressionIndex(Math.max(0, Math.min(5, newIndex)));
+
+        const triggerPoint = windowHeight * 0.4;
+        const scrolled = triggerPoint - top;
+
+        const scrollableDistance = height - windowHeight * 0.8;
+
+        let percentage = (scrolled / scrollableDistance) * 100;
+        percentage = Math.max(0, Math.min(100, percentage));
+
+        setProgressionScroll(percentage);
+
+        let newIndex = Math.min(5, Math.floor((percentage / 100) * 6));
+        setActiveProgressionIndex(newIndex);
       }
     };
 
@@ -79,20 +187,9 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const stepThemes = {
-    emerald: { border: "border-emerald-500", bg: "bg-emerald-400", shadow: "shadow-[0_0_15px_rgba(16,185,129,0.6)]", text: "text-emerald-400", cardBorder: "border-emerald-500/30" },
-    violet: { border: "border-violet-500", bg: "bg-violet-400", shadow: "shadow-[0_0_15px_rgba(139,92,246,0.6)]", text: "text-violet-400", cardBorder: "border-violet-500/30" },
-    amber: { border: "border-amber-500", bg: "bg-amber-400", shadow: "shadow-[0_0_15px_rgba(245,158,11,0.6)]", text: "text-amber-400", cardBorder: "border-amber-500/30" },
-    purple: { border: "border-purple-500", bg: "bg-purple-400", shadow: "shadow-[0_0_15px_rgba(168,85,247,0.6)]", text: "text-purple-400", cardBorder: "border-purple-500/30" },
-    blue: { border: "border-blue-500", bg: "bg-blue-400", shadow: "shadow-[0_0_15px_rgba(59,130,246,0.6)]", text: "text-blue-400", cardBorder: "border-blue-500/30" },
-    indigo: { border: "border-indigo-500", bg: "bg-indigo-400", shadow: "shadow-[0_0_15px_rgba(99,102,241,0.6)]", text: "text-indigo-400", cardBorder: "border-indigo-500/30" }
-  };
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  const getProjectLink = (proj) => proj.liveUrl || proj.github || '/lab';
 
   return (
     <div className="w-full flex flex-col text-slate-200 font-sans selection:bg-blue-500/30 selection:text-blue-100 overflow-x-clip relative min-h-screen">
@@ -107,42 +204,40 @@ export default function Home() {
 
         <section className="flex flex-col mt-10 gap-6 max-w-5xl">
           <ScrollReveal>
-
             <div className="flex items-center gap-5 mb-8">
               <div className="w-16 h-16 rounded-full border-2 border-white/10 bg-slate-800 flex items-center justify-center overflow-hidden shadow-2xl">
-                <img src={profileImage} alt="Soumik" className="w-full h-full object-cover opacity-95 scale-110" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }} />
+                <img src={profileImage} alt="Soumik Halder" className="w-full h-full object-cover opacity-95 scale-110" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }} />
                 <span className="hidden w-full h-full items-center justify-center text-slate-400 font-bold text-2xl bg-slate-800">S</span>
               </div>
               <div className="flex flex-col gap-1">
                 <span className="text-white font-black text-2xl tracking-tighter">Hi, I'm Soumik.</span>
                 <span className="text-blue-400 text-sm font-bold uppercase tracking-widest">
-                  Software Engineer
+                  Independent Software Engineer
                 </span>
               </div>
             </div>
 
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-2 w-fit">
-              <Activity size={14} className="animate-pulse" /> Backend Systems • AI Applications • Developer Tools
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-widest mb-2 w-fit">
+              <Activity size={14} className="animate-pulse" /> Engineered From First Principles
             </div>
+          </ScrollReveal>
 
+          <ScrollReveal delay={100}>
             <h1 className="text-5xl md:text-7xl lg:text-[4rem] font-black tracking-tight text-white leading-[1.05]">
-              I build AI-powered products, developer tools, and software systems <br className="hidden xl:block" />
+              I build systems from primitives: <br className="hidden xl:block" />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-blue-500">
-                from the database layer to the user experience.
+                AI infrastructure, developer tools, and distributed applications.
               </span>
             </h1>
 
             <p className="text-xl md:text-2xl text-slate-300 font-medium mt-6 max-w-3xl leading-relaxed">
               From low-level version control systems to AI-assisted recruitment platforms, I focus on turning complex workflows into deterministic, highly scalable software.
             </p>
+          </ScrollReveal>
 
+          <ScrollReveal delay={200}>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 py-8 border-t border-white/5">
-              {[
-                { val: "15+", label: "Projects Built", icon: Rocket },
-                { val: "20+", label: "Demo Videos", icon: PlayCircle },
-                { val: "20+", label: "System Diagrams", icon: Network },
-                { val: "5", label: "Production Deployments", icon: ShieldCheck }
-              ].map((m) => (
+              {statsGrid.map((m) => (
                 <div key={m.label} className="flex flex-col gap-1">
                   <div className="flex items-center gap-2 text-white">
                     <m.icon size={16} className="text-blue-500" />
@@ -156,7 +251,7 @@ export default function Home() {
             <div className="flex flex-col gap-3 pb-8 border-b border-white/5">
               <span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Featured Technologies</span>
               <div className="flex flex-wrap gap-2">
-                {['Go', 'Java', 'PostgreSQL', 'MongoDB', 'React', 'Redis', 'Docker', 'Web Crypto API', 'TensorFlow', 'OpenAI'].map(tech => (
+                {featuredTech.map(tech => (
                   <span key={tech} className="px-3 py-1.5 bg-black/40 border border-white/5 rounded-lg text-[10px] font-bold uppercase tracking-widest text-slate-400 shadow-sm">{tech}</span>
                 ))}
               </div>
@@ -225,7 +320,7 @@ export default function Home() {
                       <div className="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
                     </div>
                     <div className="w-full flex-grow relative bg-black">
-                      <video autoPlay loop muted playsInline poster={`https://img.youtube.com/vi/${projects.devscout.videos.scenarios[0].youtubeId}/maxresdefault.jpg`} className="w-full h-full object-cover opacity-80 group-hover/video:opacity-100 transition-opacity duration-500">
+                      <video autoPlay loop muted playsInline preload="metadata" poster={`https://img.youtube.com/vi/${projects.devscout.videos?.scenarios?.[0]?.youtubeId || ''}/maxresdefault.jpg`} className="w-full h-full object-cover opacity-80 group-hover/video:opacity-100 transition-opacity duration-500">
                         <source src="/devscout-loop.mp4" type="video/mp4" />
                       </video>
                     </div>
@@ -244,56 +339,44 @@ export default function Home() {
             <div className="sticky top-32 flex flex-col gap-8">
               <ScrollReveal>
                 <div className="flex flex-col gap-3">
-                  <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight flex flex-col gap-2">
-                    <span className="flex items-center gap-3"><Code2 className="text-blue-500" size={36} /> Selected</span>
+                  <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight flex flex-col gap-1">
+                    <span className="flex items-center gap-3"><Code2 className="text-blue-500" size={32} /> Selected</span>
                     <span>Engineering</span>
                     <span className="text-slate-500">Progression</span>
                   </h2>
-                  <p className="text-slate-400 text-lg font-medium mt-4 leading-relaxed pr-4">
+                  <p className="text-slate-400 text-base md:text-lg font-medium mt-4 leading-relaxed pr-4">
                     Tracking the architectural evolution from low-level fundamentals to complex enterprise systems.
                   </p>
                 </div>
               </ScrollReveal>
 
-              <div className="hidden lg:flex flex-col gap-8 relative pl-4 border-l-2 border-slate-800/60 ml-2 mt-8">
-                <div
-                  className="absolute top-0 left-[-2px] w-[2px] bg-gradient-to-b from-emerald-500 via-purple-500 to-blue-500 transition-all duration-300 ease-out shadow-[0_0_15px_rgba(59,130,246,0.5)]"
-                  style={{ height: `${progressionScroll}%` }}
-                ></div>
+              <ScrollReveal delay={100}>
+                <div className="hidden lg:flex flex-col gap-8 relative pl-4 border-l-2 border-slate-800/60 ml-2 mt-8">
+                  <div
+                    className="absolute top-0 left-[-2px] w-[2px] bg-gradient-to-b from-emerald-500 via-purple-500 to-blue-500 transition-all duration-300 ease-out shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+                    style={{ height: `${progressionScroll}%` }}
+                  ></div>
 
-                {[
-                  { title: "MiniGit", color: "emerald" },
-                  { title: "Qix", color: "blue" },
-                  { title: "Universe Explorer", color: "violet" },
-                  { title: "VisionDetect", color: "amber" },
-                  { title: "Lie Detector Pro", color: "purple" },
-                  { title: "KrishnaSpeaks", color: "indigo" }
-                ].map((step, idx) => {
-                  const isActive = idx <= activeProgressionIndex;
-                  const isCurrent = idx === activeProgressionIndex;
+                  {progressionSteps.map((step, idx) => {
+                    const isActive = idx <= activeProgressionIndex;
+                    const isCurrent = idx === activeProgressionIndex;
 
-                  return (
-                    <div key={step.title} className="flex items-center gap-5 transition-all duration-500">
-                      <div className={`absolute left-[-6px] w-2.5 h-2.5 rounded-full transition-all duration-500 ${isActive ? 'bg-white shadow-[0_0_12px_white] scale-125' : 'bg-slate-800 scale-100'}`}></div>
-                      <span className={`text-sm font-black uppercase tracking-widest transition-all duration-500 ${isCurrent ? 'text-white translate-x-2' : isActive ? 'text-slate-400' : 'text-slate-700'}`}>
-                        {step.title}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
+                    return (
+                      <div key={step.title} className="flex items-center gap-5 transition-all duration-500">
+                        <div className={`absolute left-[-6px] w-2.5 h-2.5 rounded-full transition-all duration-500 ${isActive ? 'bg-white shadow-[0_0_12px_white] scale-125' : 'bg-slate-800 scale-100'}`}></div>
+                        <span className={`text-xs font-bold uppercase tracking-widest transition-all duration-500 ${isCurrent ? 'text-white translate-x-2' : isActive ? 'text-slate-400' : 'text-slate-700'}`}>
+                          {step.title}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </ScrollReveal>
             </div>
           </div>
 
           <div className="lg:w-2/3 flex flex-col gap-10 md:gap-16 relative z-10 pb-12">
-            {[
-              { ...projects.minigit, color: 'emerald', icon: Terminal, desc: "A Git-like version control system built from scratch in Java. Mastered low-level atomic operations, SHA-1 hashing, and Zlib compression." },
-              { ...projects.qix, color: 'blue', icon: Lock, desc: "Zero-knowledge ephemeral communication vault. Engineered secure E2E encryption via Web Crypto API, Go WebSockets, and Redis." },
-              { ...projects.universeExplorer, color: 'violet', icon: Orbit, desc: "Procedural world generation using noise algorithms. Learned high-performance rendering via HTML5 Canvas." },
-              { ...projects.visionDetect, color: 'amber', icon: Zap, desc: "Client-side object detection using TensorFlow.js. Deployed serverless machine learning for real-time computer vision." },
-              { ...projects.lieDetector, color: 'purple', icon: BrainCircuit, desc: "Real-time biometric analysis using PostgreSQL triggers and AI. Fused deterministic databases with edge-function AI interpretation." },
-              { ...projects.krishnaSpeaks, color: 'indigo', icon: Network, desc: "Retrieval-enhanced conversational architecture with persistent memory. Architected a full-stack chatbot with localized context awareness." }
-            ].map((proj, idx) => {
+            {progressionProjects.map((proj, idx) => {
               const theme = domainThemes[proj.color];
               const isCurrent = idx === activeProgressionIndex;
               const hasPassed = idx < activeProgressionIndex;
@@ -305,10 +388,10 @@ export default function Home() {
               };
 
               return (
-                <ScrollReveal key={proj.title} delay={0} className="w-full">
+                <ScrollReveal key={proj.title} delay={idx * 100} className="w-full">
                   <div className={`group relative transition-all duration-700 ${isCurrent ? 'scale-[1.02] opacity-100 z-20' : hasPassed ? 'scale-100 opacity-50 hover:opacity-100' : 'scale-[0.98] opacity-30'}`}>
 
-                    <div className={`absolute -inset-1 rounded-[3rem] blur-2xl transition-opacity duration-1000 ${isCurrent ? 'opacity-20' : 'opacity-0'} ${glowColors[proj.color]}`}></div>
+                    <div className={`absolute -inset-1 rounded-[3rem] blur-lg transition-opacity duration-1000 ${isCurrent ? 'opacity-20' : 'opacity-0'} ${glowColors[proj.color]}`}></div>
 
                     <Link to={getProjectLink(proj)} target={proj.liveUrl || proj.github ? "_blank" : "_self"} className={`relative block overflow-hidden rounded-[2.5rem] border ${isCurrent ? theme.accentBorder : 'border-white/5'} bg-[#05070a]/90 backdrop-blur-xl p-8 md:p-12 flex flex-col shadow-2xl transition-all duration-500 h-full`}>
                       <div className="flex flex-col gap-6 relative z-10">
@@ -333,9 +416,24 @@ export default function Home() {
                           {proj.desc}
                         </p>
 
+                        <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-white/5">
+                          <div className="text-sm md:text-base text-slate-300">
+                            <span className="font-bold text-white uppercase tracking-wider text-xs mr-2">Problem</span>
+                            {proj.problem}
+                          </div>
+                          <div className="text-sm md:text-base text-slate-300">
+                            <span className="font-bold text-white uppercase tracking-wider text-xs mr-2">Solution</span>
+                            {proj.solution}
+                          </div>
+                          <div className="text-sm md:text-base text-slate-300">
+                            <span className="font-bold text-white uppercase tracking-wider text-xs mr-2">Impact</span>
+                            {proj.impact}
+                          </div>
+                        </div>
+
                         <div className="flex items-center justify-between mt-4 pt-8 border-t border-white/5">
                           <div className="flex flex-wrap gap-2">
-                            {proj.stack.slice(0, 4).map(tech => (
+                            {proj.stack && proj.stack.slice(0, 4).map(tech => (
                               <span key={tech} className="px-3 py-1.5 bg-black/40 border border-white/5 rounded-lg text-[11px] font-bold uppercase tracking-widest text-slate-400">{tech}</span>
                             ))}
                           </div>
@@ -364,13 +462,7 @@ export default function Home() {
               </div>
 
               <div className="flex flex-col gap-5 md:w-1/2 relative z-10 bg-black/20 p-8 rounded-3xl border border-white/5">
-                {[
-                  { text: "20+ Architecture Diagrams", icon: Network },
-                  { text: "20+ Live Demo Videos", icon: PlayCircle },
-                  { text: "Implementation Walkthroughs", icon: GitBranch },
-                  { text: "Technical Trade-offs", icon: Scale },
-                  { text: "Source Code References", icon: FileSearch }
-                ].map((item, i) => (
+                {caseStudyFeatures.map((item, i) => (
                   <div key={i} className="flex items-center gap-4 text-slate-300">
                     <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
                       <item.icon size={16} className="text-blue-400" />
@@ -383,7 +475,31 @@ export default function Home() {
           </ScrollReveal>
         </section>
 
-        <section className="flex flex-col gap-8 w-full mt-8 max-w-4xl mx-auto">
+        <section className="flex flex-col gap-8 w-full mt-16 max-w-5xl mx-auto">
+          <ScrollReveal>
+            <div className="flex flex-col gap-2 mb-8 text-center items-center">
+              <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight">
+                Engineering Philosophy
+              </h2>
+              <p className="text-slate-400 text-sm font-bold tracking-wide">
+                The principles driving my architecture decisions.
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+            {philosophyCards.map((phil, i) => (
+              <ScrollReveal key={i} delay={i * 100}>
+                <div className="bg-[#05070a]/80 border border-white/10 rounded-2xl p-6 hover:border-blue-500/50 transition-all duration-300 shadow-lg h-full">
+                  <h4 className="text-white font-bold text-lg mb-2">{phil.title}</h4>
+                  <p className="text-slate-400 text-sm leading-relaxed">{phil.desc}</p>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </section>
+
+        <section className="flex flex-col gap-8 w-full mt-16 max-w-4xl mx-auto">
           <ScrollReveal>
             <div className="flex flex-col gap-2 mb-4 text-center items-center">
               <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight flex items-center justify-center gap-3">
@@ -394,12 +510,7 @@ export default function Home() {
           </ScrollReveal>
 
           <div className="flex flex-col gap-4 w-full">
-            {[
-              { desc: "Built a Git-like VCS from scratch in Java.", link: getProjectLink(projects.minigit), label: "View MiniGit" },
-              { desc: "Architected a zero-knowledge communication vault in Go.", link: "/qix", label: "View Qix" },
-              { desc: "Designed AI recruitment platform with deep telemetry analysis.", link: "/devscout", label: "View DevScout" },
-              { desc: "Built deterministic AI scoring pipelines using edge computing.", link: "/lab", label: "View Research Lab" }
-            ].map((highlight, index) => (
+            {engineeringHighlights.map((highlight, index) => (
               <ScrollReveal key={index} delay={index * 100}>
                 <Link to={highlight.link} target={highlight.link.startsWith('http') ? "_blank" : "_self"} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/[0.02] border border-white/5 p-5 md:p-6 rounded-2xl hover:bg-white/[0.04] hover:border-slate-500/30 transition-all duration-300 group">
                   <div className="flex items-center gap-4">
@@ -433,11 +544,11 @@ export default function Home() {
 
               <div className="flex flex-col gap-6 relative z-10 w-full max-w-4xl mx-auto">
                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.1]">
-                  Looking for an engineer who moves seamlessly from <br className="hidden lg:block" />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">architecture</span> to <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">implementation</span>?
+                  I build systems where <br className="hidden lg:block" />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">architecture</span>, <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">engineering</span>, and product meet.
                 </h2>
                 <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-medium">
-                  Whether it's designing AI evaluation pipelines or building deterministic backend systems, I enjoy tackling hard engineering problems.
+                  Designed, architected, and implemented independently. Let's discuss your hardest engineering challenges.
                 </p>
               </div>
 
@@ -446,12 +557,12 @@ export default function Home() {
                 <a href="mailto:soumikhlder@gmail.com" className="relative w-full sm:w-auto group/btn">
                   <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl blur opacity-50 group-hover/btn:opacity-100 transition duration-500 group-hover/btn:duration-200"></div>
                   <div className="relative w-full sm:w-auto px-10 py-4 bg-[#05070a] border border-white/10 text-white font-bold rounded-2xl transition-all flex items-center justify-center gap-3 text-base group-hover/btn:-translate-y-1">
-                    <Mail size={18} className="text-blue-400 group-hover/btn:scale-110 transition-transform" /> Start a Conversation
+                    <Terminal size={18} className="text-blue-400 group-hover/btn:scale-110 transition-transform" /> Discuss a Technical Challenge
                   </div>
                 </a>
 
                 <Link to="/journey" className="w-full sm:w-auto px-10 py-4 bg-white/[0.02] border border-white/10 hover:bg-white/[0.06] hover:border-white/30 text-white font-bold rounded-2xl transition-all shadow-lg text-center text-base flex items-center justify-center gap-3 backdrop-blur-md hover:-translate-y-1 group/link">
-                  Read My Journey <ArrowRight size={18} className="text-slate-500 group-hover/link:text-white group-hover/link:translate-x-1 transition-all" />
+                  Explore My Engineering Journey <ArrowRight size={18} className="text-slate-500 group-hover/link:text-white group-hover/link:translate-x-1 transition-all" />
                 </Link>
               </div>
             </div>
