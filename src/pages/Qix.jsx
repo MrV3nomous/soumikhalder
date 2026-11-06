@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import {
-    ArrowLeft, ExternalLink, Lock, Server, ShieldCheck,
+    ExternalLink, Lock, Server, ShieldCheck,
     Trash2, Database, Network, Key, Cpu, Globe, Code2,
-    Terminal, PlayCircle, Maximize2, Hand, X, ChevronLeft, ChevronRight, ArrowRight,
+    Terminal, PlayCircle, Maximize2, Hand, X, ChevronLeft, ChevronRight,
     Zap, UserX, Timer, EyeOff
 } from 'lucide-react';
 import { projects } from '../data/projects';
@@ -41,26 +40,44 @@ export default function Qix() {
     const [panPosition, setPanPosition] = useState({ x: 0, y: 0 });
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
-    useEffect(() => { if (!isZoomed) setPanPosition({ x: 0, y: 0 }); }, [isZoomed]);
+    function handleNext(e) {
+        e?.stopPropagation();
+        setActiveIndex((prev) => (prev + 1) % allMedia.length);
+        setIsZoomed(false);
+        setPanPosition({ x: 0, y: 0 });
+    }
+
+    function handlePrev(e) {
+        e?.stopPropagation();
+        setActiveIndex((prev) => (prev - 1 + allMedia.length) % allMedia.length);
+        setIsZoomed(false);
+        setPanPosition({ x: 0, y: 0 });
+    }
 
     useEffect(() => {
-        if (activeMedia) document.body.style.overflow = 'hidden';
-        else { document.body.style.overflow = 'unset'; setIsZoomed(false); }
-
+        document.body.style.overflow = activeMedia ? 'hidden' : '';
         const handleKeyDown = (e) => {
             if (e.key === 'Escape') setActiveIndex(null);
-            if (e.key === 'ArrowRight' && activeIndex !== null) handleNext(e);
-            if (e.key === 'ArrowLeft' && activeIndex !== null) handlePrev(e);
+            if (e.key === 'ArrowRight' && activeIndex !== null) {
+                setActiveIndex((prev) => (prev + 1) % allMedia.length);
+                setIsZoomed(false);
+                setPanPosition({ x: 0, y: 0 });
+            }
+            if (e.key === 'ArrowLeft' && activeIndex !== null) {
+                setActiveIndex((prev) => (prev - 1 + allMedia.length) % allMedia.length);
+                setIsZoomed(false);
+                setPanPosition({ x: 0, y: 0 });
+            }
         };
         window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [activeMedia, activeIndex]);
-
-    const handleNext = (e) => { e?.stopPropagation(); setActiveIndex((prev) => (prev + 1) % allMedia.length); setIsZoomed(false); };
-    const handlePrev = (e) => { e?.stopPropagation(); setActiveIndex((prev) => (prev - 1 + allMedia.length) % allMedia.length); setIsZoomed(false); };
+        return () => {
+            document.body.style.overflow = '';
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [activeMedia, activeIndex, allMedia.length]);
 
     return (
-        <div className="w-full flex flex-col text-slate-200 font-sans selection:bg-blue-500/30 overflow-x-hidden relative animate-in fade-in duration-700 min-h-screen">
+        <div className="portfolio-project-page portfolio-project-page--qix w-full flex flex-col text-slate-200 font-sans selection:bg-blue-500/30 overflow-x-hidden relative animate-in fade-in duration-700 min-h-screen">
 
             <div className="fixed inset-0 z-0 pointer-events-none">
                 <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-blue-600/5 blur-[120px] rounded-full mix-blend-screen" />
@@ -70,6 +87,7 @@ export default function Qix() {
 
             <main className="relative z-10 pt-24 pb-32 px-4 md:px-8 max-w-7xl mx-auto flex flex-col gap-24 w-full">
 
+                <a href="/lab" className="portfolio-page-backlink">← Engineering archive</a>
                 <section className="flex flex-col gap-12 w-full items-center text-center">
 
                     <div className="flex flex-col gap-6 items-center max-w-4xl mx-auto">

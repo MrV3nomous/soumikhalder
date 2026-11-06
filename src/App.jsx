@@ -11,12 +11,11 @@ import Contact from './pages/Contact';
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-slate-950 font-sans text-slate-50 selection:bg-blue-500/30">
+    <div className="min-h-screen bg-[#080d13] font-sans text-slate-100 selection:bg-blue-400/30 selection:text-white">
+      <a href="#page-content" className="sr-only z-[200] rounded bg-white px-4 py-2 text-black focus:not-sr-only focus:fixed focus:left-4 focus:top-4">Skip to content</a>
       <ScrollManager />
-
       <Navbar />
-
-      <main className="max-w-7xl mx-auto px-6 pb-24">
+      <div id="page-content" className="w-full">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/devscout" element={<DevScout />} />
@@ -27,7 +26,7 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<Home />} />
         </Routes>
-      </main>
+      </div>
     </div>
   );
 }

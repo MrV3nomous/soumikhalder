@@ -1,574 +1,248 @@
-import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import {
-  ArrowRight, Terminal, Activity, Target, GitBranch,
-  BrainCircuit, Orbit, Compass, Zap, Check, Mail, Code2,
-  ShieldCheck, Rocket, FileCode2, Network,
-  FileSearch, PlayCircle, Scale, Lock
+  ArrowDownRight,
+  ArrowRight,
+  ArrowUpRight,
+  Mail,
+  MapPin,
+  Database,
+  Workflow,
+  Braces,
+  Layers3,
+  LockKeyhole,
+  Sparkles,
+  Network,
+  Rocket,
+  Code2,
 } from 'lucide-react';
-import { projects } from '../data/projects';
-import profileImage from '../assets/me.jpg';
+import { Link } from 'react-router-dom';
+import heroArt from '../assets/hero-system.svg';
+import comeWildArt from '../assets/projects/come-wild.svg';
+import qixArt from '../assets/projects/qix.svg';
+import devScoutArt from '../assets/projects/devscout.svg';
+import platformArt from '../assets/projects/platform.svg';
+import miniGitArt from '../assets/projects/minigit.svg';
+import lieArt from '../assets/projects/lie.svg';
 
-const domainThemes = {
-  blue: { iconBg: "bg-blue-500/10", iconBorder: "border-blue-500/20", iconText: "text-blue-400", accentBorder: "hover:border-blue-500/30", shadow: "hover:shadow-[0_0_30px_rgba(59,130,246,0.1)]" },
-  emerald: { iconBg: "bg-emerald-500/10", iconBorder: "border-emerald-500/20", iconText: "text-emerald-400", accentBorder: "hover:border-emerald-500/30", shadow: "hover:shadow-[0_0_30px_rgba(16,185,129,0.1)]" },
-  indigo: { iconBg: "bg-indigo-500/10", iconBorder: "border-indigo-500/20", iconText: "text-indigo-400", accentBorder: "hover:border-indigo-500/30", shadow: "hover:shadow-[0_0_30px_rgba(99,102,241,0.1)]" },
-  purple: { iconBg: "bg-purple-500/10", iconBorder: "border-purple-500/20", iconText: "text-purple-400", accentBorder: "hover:border-purple-500/30", shadow: "hover:shadow-[0_0_30px_rgba(168,85,247,0.1)]" },
-  violet: { iconBg: "bg-violet-500/10", iconBorder: "border-violet-500/20", iconText: "text-violet-400", accentBorder: "hover:border-violet-500/30", shadow: "hover:shadow-[0_0_30px_rgba(139,92,246,0.1)]" },
-  amber: { iconBg: "bg-amber-500/10", iconBorder: "border-amber-500/20", iconText: "text-amber-400", accentBorder: "hover:border-amber-500/30", shadow: "hover:shadow-[0_0_30px_rgba(245,158,11,0.1)]" }
-};
-
-const featuredTech = ['JavaScript', 'React', 'Node.js', 'Java', 'MongoDB', 'Redis', 'Tailwind CSS', 'PostgreSQL', 'Docker', 'GOLANG', 'Linux'];
-
-const statsGrid = [
-  { val: "7", label: "Independent Systems Built", icon: Rocket },
-  { val: "20+", label: "Architecture Documents", icon: FileCode2 },
-  { val: "50+", label: "Technical Experiments", icon: Activity },
-  { val: "5", label: "Live Deployments", icon: ShieldCheck }
-];
-
-const progressionProjects = [
+const projects = [
   {
-    ...projects.minigit,
-    domain: "Storage & VCS",
-    color: 'emerald',
-    icon: Terminal,
-    desc: "A Git-like version control system built from scratch in Java. Implemented low-level atomic operations, SHA-1 hashing, and Zlib compression.",
-    problem: "Reliance on black-box version control tools.",
-    solution: "Engineered a custom VCS interpreting raw bytes.",
-    impact: "Mastered low-level data compression and integrity."
+    name: 'Come Wild',
+    category: 'Social discovery · Independent product',
+    summary: 'A dating and social-discovery product shaped around expressive profiles, considered interactions and a responsive experience across devices.',
+    stack: ['React', 'TypeScript', 'Supabase', 'PostgreSQL'],
+    status: 'Product build',
+    url: 'https://comewild.vercel.app/',
+    accent: 'violet',
+    mark: 'CW',
+    artwork: comeWildArt,
   },
   {
-    ...projects.qix,
-    domain: "Security & Crypto",
-    color: 'blue',
-    icon: Lock,
-    desc: "Zero-knowledge ephemeral communication vault. Architected secure E2E encryption via Web Crypto API, Go WebSockets, and Redis.",
-    problem: "Sensitive communications require absolute server-side trust.",
-    solution: "Browser-controlled zero-knowledge encryption architecture.",
-    impact: "Server mathematically cannot access plaintext data."
+    name: 'Qix',
+    category: 'Privacy · Distributed systems',
+    summary: 'A privacy-focused messaging system using client-side encryption, WebSocket message routing and short-lived data lifecycles.',
+    stack: ['React', 'Go', 'WebSockets', 'MongoDB', 'Redis'],
+    status: 'Live product',
+    url: 'https://qix-six.vercel.app/',
+    route: '/qix',
+    accent: 'blue',
+    mark: 'Q',
+    artwork: qixArt,
   },
   {
-    ...projects.universeExplorer,
-    domain: "Engine Rendering",
-    color: 'violet',
-    icon: Orbit,
-    desc: "Procedural world generation using noise algorithms. Implemented high-performance rendering via HTML5 Canvas.",
-    problem: "Static digital environments lack organic replayability.",
-    solution: "Simulated natural generation using deterministic noise functions.",
-    impact: "High-performance procedural rendering on the client."
+    name: 'DevScout',
+    category: 'AI · Recruitment workflows',
+    summary: 'An AI-assisted hiring platform for candidate analysis, structured evaluation, interview assessment and decision tracking.',
+    stack: ['React', 'TypeScript', 'PostgreSQL', 'Supabase', 'LLM APIs'],
+    status: 'Live product',
+    url: 'https://devscout-orcin.vercel.app/',
+    route: '/devscout',
+    accent: 'cyan',
+    mark: 'DS',
+    artwork: devScoutArt,
   },
   {
-    ...projects.visionDetect,
-    domain: "Edge ML",
-    color: 'amber',
-    icon: Zap,
-    desc: "Client-side object detection using TensorFlow.js. Deployed serverless machine learning for real-time computer vision.",
-    problem: "Server-side ML inference causes high latency and costs.",
-    solution: "Distributed execution of models directly in the user browser.",
-    impact: "Achieved real-time serverless visual processing."
+    name: 'Proprietary Platform Engineering',
+    category: 'Confidential · Transaction systems',
+    summary: 'End-to-end engineering of a proprietary platform, including payment processing, transaction-safe workflows, data-integrity safeguards and automated asset pipelines.',
+    stack: ['PostgreSQL', 'Supabase', 'Razorpay', 'GitHub Actions'],
+    status: 'Private case study',
+    confidential: true,
+    accent: 'emerald',
+    mark: 'PX',
+    artwork: platformArt,
   },
   {
-    ...projects.lieDetector,
-    domain: "DB Triggers & AI",
-    color: 'purple',
-    icon: BrainCircuit,
-    desc: "Real-time biometric analysis using PostgreSQL triggers and AI. Fused deterministic databases with edge-function AI interpretation.",
-    problem: "Need for rapid forensic data visualization.",
-    solution: "Real-time analysis pipeline leveraging edge computing.",
-    impact: "Bridged strict database triggers with generative AI logic."
+    name: 'MiniGit',
+    category: 'Developer tools · Computer science',
+    summary: 'A Git-inspired version-control implementation exploring content-addressable storage, hashing, commits and repository state.',
+    stack: ['Java', 'SHA-1', 'Zlib', 'File systems'],
+    status: 'Source available',
+    url: 'https://github.com/MrV3nomous/MiniGit',
+    route: '/minigit',
+    accent: 'amber',
+    mark: 'MG',
+    artwork: miniGitArt,
   },
   {
-    ...projects.krishnaSpeaks,
-    domain: "Product Systems",
-    color: 'indigo',
-    icon: Network,
-    desc: "Retrieval-enhanced conversational architecture with persistent memory. Architected a full-stack chatbot with localized context awareness.",
-    problem: "Standard conversational bots lack localized context and memory.",
-    solution: "Designed a multi-stage retrieval augmented pipeline.",
-    impact: "Enabled persistent entity memory and context-aware routing."
-  }
+    name: 'Lie Detector Pro',
+    category: 'AI · Data-driven evaluation',
+    summary: 'A hybrid evaluation application combining deterministic database logic with AI-assisted semantic analysis and structured scoring.',
+    stack: ['React', 'PostgreSQL', 'PL/pgSQL', 'Supabase Edge Functions'],
+    status: 'Live product',
+    url: 'https://lie-detector-pro.vercel.app/',
+    accent: 'rose',
+    mark: 'LD',
+    artwork: lieArt,
+  },
 ];
 
-const caseStudyFeatures = [
-  { text: "20+ Architecture Diagrams", icon: Network },
-  { text: "20+ Live Demo Videos", icon: PlayCircle },
-  { text: "Implementation Walkthroughs", icon: GitBranch },
-  { text: "Technical Trade-offs", icon: Scale },
-  { text: "Source Code References", icon: FileSearch }
+const additionalProjects = [
+  { name: 'Krishna Speaks', description: 'A conversational AI application with web and Java desktop experiences.', stack: 'Java · React · LLM integration', url: 'https://krishna-speaks-kappa.vercel.app/' },
+  { name: 'VisionDetect', description: 'Browser-based object detection using client-side machine-learning inference.', stack: 'JavaScript · TensorFlow.js · COCO-SSD', url: 'https://vision-detect.vercel.app/' },
+  { name: 'Universe Explorer', description: 'An interactive astronomy experience using procedural rendering and canvas-based visualisation.', stack: 'JavaScript · Canvas · Algorithms', url: 'https://mrv3nomous.github.io/universe-explorer/' },
+  { name: "Texas Hold’em CLI", description: 'A terminal-based poker implementation focused on game state and object-oriented design.', stack: 'Java · OOP · State modelling', url: 'https://github.com/MrV3nomous/TexasHoldemCLI' },
 ];
 
-const philosophyCards = [
-  { title: "Design for Failure", desc: "Systems should degrade gracefully. I architect with edge cases and fallbacks as primary requirements." },
-  { title: "Make Complexity Visible", desc: "Architecture decisions must be documented and transparent, never hidden behind 'magic' frameworks." },
-  { title: "Build From Fundamentals", desc: "Understanding primitives creates better abstractions. I build from scratch to master the lower levels." }
+const capabilities = [
+  { icon: Braces, number: '01', title: 'APIs & application services', text: 'Designing, integrating and troubleshooting the interfaces that let software systems communicate.' },
+  { icon: Database, number: '02', title: 'Data & transaction integrity', text: 'Modelling data, protecting state and making critical workflows predictable and recoverable.' },
+  { icon: Workflow, number: '03', title: 'Technical investigation', text: 'Reproducing defects, tracing behaviour, isolating root causes and turning findings into fixes.' },
+  { icon: Layers3, number: '04', title: 'Product delivery', text: 'Owning the path from an initial idea and architecture to a tested, deployed application.' },
 ];
 
-const getProjectLink = (proj) => proj.liveUrl || proj.github || '/lab';
-
-const engineeringHighlights = [
-  { desc: "Built a Git-like VCS from scratch in Java.", link: getProjectLink(projects.minigit), label: "View MiniGit" },
-  { desc: "Architected a zero-knowledge communication vault in Go.", link: "/qix", label: "View Qix" },
-  { desc: "Designed AI recruitment platform with deep telemetry analysis.", link: "/devscout", label: "View DevScout" },
-  { desc: "Built deterministic AI scoring pipelines using edge computing.", link: "/lab", label: "View Research Lab" }
+const experience = [
+  { role: 'Independent Product Engineer', organisation: 'Independent Product Development', period: 'Jun 2025 – Present', description: 'Designing, building and deploying software products across backend systems, full-stack applications, integrations and infrastructure.' },
+  { role: 'Music Educator & Program Coordinator', organisation: 'Furtados School of Music', period: 'Dec 2023 – Mar 2025', description: 'Designed structured learning programmes for 300+ students and coordinated academic activities and events.' },
+  { role: 'Senior Software Engineer', organisation: 'Geotech Informatics Services', period: 'May 2021 – Dec 2021', description: 'Developed Java backend services and REST APIs, worked across Android application workflows, and wrote unit and integration tests.' },
+  { role: 'Co-Founder & Operations Lead', organisation: 'Keshav Foods', period: '2018 – 2021', description: 'Managed supply-chain, inventory and day-to-day business operations.' },
+  { role: 'Software Engineer', organisation: 'WYDR', period: 'Oct 2016 – May 2018', description: 'Developed Android and web features, backend APIs and AWS-based deployments.' },
 ];
 
-function ScrollReveal({ children, delay = 0, direction = "up", className = "" }) {
-  const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef(null);
+const skillGroups = [
+  { label: 'Languages', items: ['Java', 'JavaScript', 'TypeScript', 'Python', 'Kotlin', 'SQL'] },
+  { label: 'Backend & APIs', items: ['Node.js', 'Express.js', 'Go', 'REST APIs', 'WebSockets', 'Authentication'] },
+  { label: 'Data systems', items: ['PostgreSQL', 'MongoDB', 'Supabase', 'Redis', 'Data modelling'] },
+  { label: 'Frontend', items: ['React', 'Tailwind CSS', 'HTML', 'CSS', 'Responsive UI'] },
+  { label: 'Infrastructure', items: ['AWS', 'Docker', 'Linux', 'Git', 'GitHub Actions', 'CI/CD'] },
+  { label: 'Applied AI', items: ['LLM APIs', 'AI workflows', 'Prompt design', 'TensorFlow.js'] },
+];
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "0px 0px -10% 0px", threshold: 0.05 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-
-  const yOffset = direction === "up" ? 30 : direction === "down" ? -30 : 0;
-  const xOffset = direction === "left" ? 30 : direction === "right" ? -30 : 0;
-
+function ProjectArtwork({ project }) {
   return (
-    <div
-      ref={ref}
-      className={className}
-      style={{
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? `translate3d(0, 0, 0)` : `translate3d(${xOffset}px, ${yOffset}px, 0)`,
-        transition: `opacity 1s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 1s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
-        willChange: 'opacity, transform'
-      }}
-    >
-      {children}
+    <div className={`project-art project-art--${project.accent}`} aria-hidden="true">
+      <img src={project.artwork} alt="" loading="lazy" />
+      <span className="project-art__mark">{project.mark}</span>
+      <span className="project-art__shine" />
+    </div>
+  );
+}
+
+function ProjectCard({ project, index }) {
+  return (
+    <article className={`project-card project-card--${project.accent}`}>
+      <ProjectArtwork project={project} />
+      <div className="project-card__body">
+        <div className="project-card__meta">
+          <span className="project-card__category">{project.category}</span>
+          <span className="project-card__status">{project.status}</span>
+        </div>
+        <div className="project-card__title-row">
+          <h3>{project.name}</h3>
+          <span className="project-card__index">0{index + 1}</span>
+        </div>
+        <p className="project-card__summary">{project.summary}</p>
+        <div className="project-card__stack">
+          {project.stack.map((item) => <span key={item} className="tech-pill">{item}</span>)}
+        </div>
+        {(project.url || project.route || project.confidential) && (
+          <div className="project-card__links">
+            {project.route && <Link to={project.route} className="project-link project-link--primary">Explore case study <ArrowRight size={15} /></Link>}
+            {project.url && <a href={project.url} target="_blank" rel="noreferrer" className="project-link">{project.route ? 'Open product' : project.status === 'Source available' ? 'View source' : 'Visit project'} <ArrowUpRight size={15} /></a>}
+            {project.confidential && <span className="project-link project-link--quiet"><LockKeyhole size={14} /> Details available privately</span>}
+          </div>
+        )}
+      </div>
+    </article>
+  );
+}
+
+function SectionHeading({ eyebrow, title, description, light = false }) {
+  return (
+    <div className="section-heading">
+      <p className="section-eyebrow">{eyebrow}</p>
+      <h2 className={light ? 'section-title section-title--light' : 'section-title'}>{title}</h2>
+      {description && <p className="section-description">{description}</p>}
     </div>
   );
 }
 
 export default function Home() {
-  const progressionRef = useRef(null);
-  const [progressionScroll, setProgressionScroll] = useState(0);
-  const [activeProgressionIndex, setActiveProgressionIndex] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (progressionRef.current) {
-        const { top, height } = progressionRef.current.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-
-        const triggerPoint = windowHeight * 0.4;
-        const scrolled = triggerPoint - top;
-
-        const scrollableDistance = height - windowHeight * 0.8;
-
-        let percentage = (scrolled / scrollableDistance) * 100;
-        percentage = Math.max(0, Math.min(100, percentage));
-
-        setProgressionScroll(percentage);
-
-        let newIndex = Math.min(5, Math.floor((percentage / 100) * 6));
-        setActiveProgressionIndex(newIndex);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   return (
-    <div className="w-full flex flex-col text-slate-200 font-sans selection:bg-blue-500/30 selection:text-blue-100 overflow-x-clip relative min-h-screen">
+    <div className="portfolio-home">
+      <div className="site-atmosphere" aria-hidden="true"><div className="atmosphere-glow atmosphere-glow--blue" /><div className="atmosphere-glow atmosphere-glow--violet" /><div className="atmosphere-grid" /></div>
 
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E&quot;)] opacity-[0.03] mix-blend-overlay" />
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/5 blur-[120px] rounded-full" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/5 blur-[120px] rounded-full" />
-      </div>
-
-      <main className="relative z-10 pt-20 pb-32 px-4 md:px-8 max-w-7xl mx-auto flex flex-col gap-24 w-full">
-
-        <section className="flex flex-col mt-10 gap-6 max-w-5xl">
-          <ScrollReveal>
-            <div className="flex items-center gap-5 mb-8">
-              <div className="w-16 h-16 rounded-full border-2 border-white/10 bg-slate-800 flex items-center justify-center overflow-hidden shadow-2xl">
-                <img src={profileImage} alt="Soumik Halder" className="w-full h-full object-cover opacity-95 scale-110" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }} />
-                <span className="hidden w-full h-full items-center justify-center text-slate-400 font-bold text-2xl bg-slate-800">S</span>
-              </div>
-              <div className="flex flex-col gap-1">
-                <span className="text-white font-black text-2xl tracking-tighter">Hi, I'm Soumik.</span>
-                <span className="text-blue-400 text-sm font-bold uppercase tracking-widest">
-                  Independent Software Engineer
-                </span>
-              </div>
+      <main className="home-shell">
+        <section className="hero-section">
+          <div className="hero-copy">
+            <div className="hero-kicker"><span className="hero-kicker__dot" /> INDEPENDENT PRODUCT ENGINEER <span className="hero-kicker__line" /> KOLKATA, INDIA</div>
+            <h1 className="hero-title">I turn complex problems into <span>working products.</span></h1>
+            <p className="hero-lede">I design, build and troubleshoot the systems behind digital products—APIs, backend services, data workflows and end-user applications.</p>
+            <p className="hero-support">Independent product engineering backed by professional software-development experience and hands-on business operations.</p>
+            <div className="hero-actions">
+              <a href="#work" className="button-primary">Explore selected work <ArrowDownRight size={17} /></a>
+              <Link to="/contact" className="button-secondary">Discuss an opportunity <ArrowUpRight size={16} /></Link>
             </div>
-
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-widest mb-2 w-fit">
-              <Activity size={14} className="animate-pulse" /> Engineered From First Principles
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal delay={100}>
-            <h1 className="text-5xl md:text-7xl lg:text-[4rem] font-black tracking-tight text-white leading-[1.05]">
-              I build systems from primitives: <br className="hidden xl:block" />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-blue-500">
-                AI infrastructure, developer tools, and distributed applications.
-              </span>
-            </h1>
-
-            <p className="text-xl md:text-2xl text-slate-300 font-medium mt-6 max-w-3xl leading-relaxed">
-              From low-level version control systems to AI-assisted recruitment platforms, I focus on turning complex workflows into deterministic, highly scalable software.
-            </p>
-          </ScrollReveal>
-
-          <ScrollReveal delay={200}>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 py-8 border-t border-white/5">
-              {statsGrid.map((m) => (
-                <div key={m.label} className="flex flex-col gap-1">
-                  <div className="flex items-center gap-2 text-white">
-                    <m.icon size={16} className="text-blue-500" />
-                    <span className="text-2xl font-black">{m.val}</span>
-                  </div>
-                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{m.label}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex flex-col gap-3 pb-8 border-b border-white/5">
-              <span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Featured Technologies</span>
-              <div className="flex flex-wrap gap-2">
-                {featuredTech.map(tech => (
-                  <span key={tech} className="px-3 py-1.5 bg-black/40 border border-white/5 rounded-lg text-[10px] font-bold uppercase tracking-widest text-slate-400 shadow-sm">{tech}</span>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center gap-5 mt-10 w-full sm:w-auto">
-              <a href="#flagship" className="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl transition-all shadow-[0_0_30px_rgba(37,99,235,0.3)] hover:shadow-[0_0_40px_rgba(37,99,235,0.5)] hover:-translate-y-1 flex items-center justify-center gap-3 text-base group">
-                View Flagship Case Study <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-              </a>
-              <Link to="/journey" className="w-full sm:w-auto px-8 py-4 bg-[#05070a]/80 border border-white/10 hover:border-white/20 text-white font-bold rounded-2xl transition-all shadow-lg text-center text-base backdrop-blur-md flex items-center justify-center gap-3 group">
-                <Compass size={20} className="text-slate-400 group-hover:text-white transition-colors" /> Professional Journey
-              </Link>
-            </div>
-          </ScrollReveal>
-        </section>
-
-        <section id="flagship" className="flex flex-col gap-6 w-full pt-8">
-          <ScrollReveal>
-            <div className="flex flex-col gap-2 mb-2">
-              <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight flex items-center gap-3">
-                <Target className="text-indigo-400" size={28} /> CASE STUDY
-              </h2>
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal delay={100} className="w-full">
-            <div className="group relative overflow-hidden rounded-[2.5rem] border border-white/5 bg-[#05070a]/80 hover:border-blue-500/30 transition-colors shadow-2xl backdrop-blur-md">
-              <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none group-hover:bg-blue-500/10 transition-colors duration-1000"></div>
-
-              <div className="p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row gap-12 lg:gap-16 items-center justify-between z-10 relative">
-
-                <div className="flex flex-col gap-6 w-full lg:w-1/2">
-                  <Link to="/devscout" className="flex items-center gap-4 w-fit">
-                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-3xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shadow-[0_0_30px_rgba(37,99,235,0.2)] p-3 group-hover:scale-105 transition-transform duration-500">
-                      <img src="/devscoutlightlogo.png" alt={projects.devscout.title} className="w-full h-full object-contain opacity-90 drop-shadow-md" />
-                    </div>
-                    <div className="flex flex-col">
-                      <h3 className="text-4xl md:text-5xl font-black text-white group-hover:text-blue-400 transition-colors tracking-tight">{projects.devscout.title}</h3>
-                      <span className="text-blue-400 font-bold uppercase tracking-widest text-[10px] mt-1">Enterprise Platform</span>
-                    </div>
-                  </Link>
-
-                  <div className="flex flex-col gap-4 mt-2">
-                    <p className="text-white text-xl font-bold leading-snug">
-                      An AI-powered recruitment intelligence platform that combines repository analysis, interview processing, and explainable candidate scoring.
-                    </p>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {projects.devscout.stack.slice(0, 5).map(tech => (
-                      <span key={tech} className="px-3 py-1.5 bg-black/40 border border-white/5 rounded-lg text-[10px] font-bold uppercase tracking-widest text-slate-400 shadow-sm">{tech}</span>
-                    ))}
-                  </div>
-
-                  <Link to="/devscout" className="text-blue-400 font-bold flex items-center gap-2 mt-4 hover:text-blue-300 transition-colors w-fit group/link bg-blue-500/10 border border-blue-500/20 px-6 py-3 rounded-xl">
-                    Read the Case Study <ArrowRight size={18} className="group-hover/link:translate-x-1.5 transition-transform" />
-                  </Link>
-                </div>
-
-                <div className="w-full lg:w-1/2 relative group/video">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-2xl blur-lg opacity-0 group-hover/video:opacity-100 transition-opacity duration-700"></div>
-                  <Link to="/devscout#demos" className="relative w-full aspect-[16/10] bg-[#030407] rounded-xl border border-slate-700 shadow-2xl overflow-hidden block flex flex-col cursor-pointer transform group-hover/video:scale-[1.02] transition-transform duration-500">
-                    <div className="w-full h-8 bg-slate-900 border-b border-slate-800 flex items-center px-4 gap-2 shrink-0">
-                      <div className="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
-                      <div className="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
-                      <div className="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
-                    </div>
-                    <div className="w-full flex-grow relative bg-black">
-                      <video autoPlay loop muted playsInline preload="metadata" poster={`https://img.youtube.com/vi/${projects.devscout.videos?.scenarios?.[0]?.youtubeId || ''}/maxresdefault.jpg`} className="w-full h-full object-cover opacity-80 group-hover/video:opacity-100 transition-opacity duration-500">
-                        <source src="/devscout-loop.mp4" type="video/mp4" />
-                      </video>
-                    </div>
-                  </Link>
-                </div>
-
-              </div>
-            </div>
-          </ScrollReveal>
-
-        </section>
-
-        <section className="relative flex flex-col lg:flex-row gap-12 lg:gap-20 w-full mt-12" ref={progressionRef}>
-
-          <div className="lg:w-1/3 flex flex-col relative z-20">
-            <div className="sticky top-32 flex flex-col gap-8">
-              <ScrollReveal>
-                <div className="flex flex-col gap-3">
-                  <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight flex flex-col gap-1">
-                    <span className="flex items-center gap-3"><Code2 className="text-blue-500" size={32} /> Selected</span>
-                    <span>Engineering</span>
-                    <span className="text-slate-500">Progression</span>
-                  </h2>
-                  <p className="text-slate-400 text-base md:text-lg font-medium mt-4 leading-relaxed pr-4">
-                    Tracking the architectural evolution from low-level fundamentals to complex enterprise systems.
-                  </p>
-                </div>
-              </ScrollReveal>
-
-              <ScrollReveal delay={100}>
-                <div className="hidden lg:flex flex-col gap-8 relative pl-4 border-l-2 border-slate-800/60 ml-2 mt-8">
-                  <div
-                    className="absolute top-0 left-[-2px] w-[2px] bg-gradient-to-b from-emerald-500 via-purple-500 to-blue-500 transition-all duration-300 ease-out shadow-[0_0_15px_rgba(59,130,246,0.5)]"
-                    style={{ height: `${progressionScroll}%` }}
-                  ></div>
-
-                  {progressionProjects.map((proj, idx) => {
-                    const isActive = idx <= activeProgressionIndex;
-                    const isCurrent = idx === activeProgressionIndex;
-
-                    return (
-                      <div key={proj.title} className="flex items-center gap-5 transition-all duration-500">
-                        <div className={`absolute left-[-6px] w-2.5 h-2.5 rounded-full transition-all duration-500 ${isActive ? 'bg-white shadow-[0_0_12px_white] scale-125' : 'bg-slate-800 scale-100'}`}></div>
-                        <div className={`flex items-center gap-3 transition-all duration-500 ${isCurrent ? 'text-white translate-x-2' : isActive ? 'text-slate-400' : 'text-slate-700'}`}>
-                          <proj.icon size={18} className="shrink-0" />
-                          <span className="text-xs font-bold uppercase tracking-widest">
-                            {proj.title}
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </ScrollReveal>
+            <div className="hero-meta">
+              <span><MapPin size={14} /> Kolkata · Open to Bengaluru relocation</span>
+              <a href="mailto:soumik.afterlife@gmail.com"><Mail size={14} /> soumik.afterlife@gmail.com</a><a href="tel:+919831191641"><span aria-hidden="true">☎</span> +91 98311 91641</a>
             </div>
           </div>
 
-          <div className="lg:w-2/3 flex flex-col gap-10 md:gap-16 relative z-10 pb-12">
-            {progressionProjects.map((proj, idx) => {
-              const theme = domainThemes[proj.color];
-              const isCurrent = idx === activeProgressionIndex;
-              const hasPassed = idx < activeProgressionIndex;
-
-              const glowColors = {
-                emerald: 'bg-emerald-500', violet: 'bg-violet-500',
-                amber: 'bg-amber-500', purple: 'bg-purple-500',
-                indigo: 'bg-indigo-500', blue: 'bg-blue-500'
-              };
-
-              return (
-                <ScrollReveal key={proj.title} delay={idx * 100} className="w-full">
-                  <div className={`group relative transition-all duration-700 ${isCurrent ? 'scale-[1.02] opacity-100 z-20' : hasPassed ? 'scale-100 opacity-50 hover:opacity-100' : 'scale-[0.98] opacity-30'}`}>
-
-                    <div className={`absolute -inset-1 rounded-[3rem] blur-lg transition-opacity duration-1000 ${isCurrent ? 'opacity-20' : 'opacity-0'} ${glowColors[proj.color]}`}></div>
-
-                    <Link to={getProjectLink(proj)} target={proj.liveUrl || proj.github ? "_blank" : "_self"} className={`relative block overflow-hidden rounded-[2.5rem] border ${isCurrent ? theme.accentBorder : 'border-white/5'} bg-[#05070a]/90 backdrop-blur-xl p-8 md:p-12 flex flex-col shadow-2xl transition-all duration-500 h-full`}>
-
-                      <proj.icon className="absolute -right-8 -bottom-8 w-64 h-64 text-white opacity-[0.03] rotate-12 pointer-events-none" />
-
-                      <div className="flex flex-col gap-6 relative z-10">
-                        <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
-                          <div className="flex items-center gap-5">
-                            <div className={`w-16 h-16 rounded-2xl ${theme.iconBg} border ${theme.iconBorder} flex items-center justify-center shadow-inner group-hover:rotate-3 group-hover:scale-110 transition-transform duration-500 relative z-10`}>
-                              <proj.icon size={28} className={theme.iconText} />
-                            </div>
-                            <div className="flex flex-col relative z-10">
-                              <h3 className="text-3xl font-bold text-white tracking-tight">{proj.title}</h3>
-                              {/* Replaced Evolution Phase with the targeted Domain title */}
-                              <span className={`${theme.iconText} font-bold uppercase tracking-widest text-[10px] mt-1`}>{proj.domain}</span>
-                            </div>
-                          </div>
-
-                          <div className={`hidden md:flex w-12 h-12 rounded-full border items-center justify-center transition-all duration-500 relative z-10 ${isCurrent ? `bg-white/10 ${theme.iconBorder}` : 'bg-white/5 border-white/10'}`}>
-                            <ArrowRight size={18} className={`text-white transition-transform duration-500 ${isCurrent ? '-rotate-45' : 'group-hover:-rotate-45'}`} />
-                          </div>
-                        </div>
-
-                        <p className="text-slate-400 text-lg font-medium leading-relaxed mt-2 pr-4 relative z-10">
-                          {proj.desc}
-                        </p>
-
-                        <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-white/5 relative z-10">
-                          <div className="text-sm md:text-base text-slate-300">
-                            <span className="font-bold text-white uppercase tracking-wider text-xs mr-2">Problem</span>
-                            {proj.problem}
-                          </div>
-                          <div className="text-sm md:text-base text-slate-300">
-                            <span className="font-bold text-white uppercase tracking-wider text-xs mr-2">Solution</span>
-                            {proj.solution}
-                          </div>
-                          <div className="text-sm md:text-base text-slate-300">
-                            <span className="font-bold text-white uppercase tracking-wider text-xs mr-2">Impact</span>
-                            {proj.impact}
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-between mt-4 pt-8 border-t border-white/5 relative z-10">
-                          <div className="flex flex-wrap gap-2">
-                            {proj.stack && proj.stack.slice(0, 4).map(tech => (
-                              <span key={tech} className="px-3 py-1.5 bg-black/40 border border-white/5 rounded-lg text-[11px] font-bold uppercase tracking-widest text-slate-400">{tech}</span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  </div>
-                </ScrollReveal>
-              );
-            })}
-          </div>
+          <aside className="hero-visual" aria-label="A visual representation of product engineering from architecture to delivery">
+            <div className="hero-visual__header"><span>ENGINEERING / 001</span><span className="hero-visual__availability"><i /> INDEPENDENTLY BUILT</span></div>
+            <div className="hero-visual__art"><img src={heroArt} alt="Abstract system architecture with connected layers and engineering stages" /></div>
+            <div className="hero-visual__footer"><span>IDEA <i /> SYSTEM <i /> PRODUCT</span><span>THINK · BUILD · SHIP</span></div>
+            <div className="hero-float hero-float--one"><span className="hero-float__icon"><Network size={15} /></span><span><b>Systems thinking</b><small>Structure before scale</small></span></div>
+            <div className="hero-float hero-float--two"><span className="hero-float__icon hero-float__icon--mint"><Rocket size={15} /></span><span><b>End-to-end ownership</b><small>Concept to deployment</small></span></div>
+          </aside>
         </section>
 
-        <section className="flex flex-col gap-8 w-full mt-8">
-          <ScrollReveal>
-            <div className="bg-gradient-to-br from-[#05070a] to-slate-900/40 border border-white/5 rounded-[3rem] p-10 md:p-16 max-w-5xl mx-auto shadow-2xl relative overflow-hidden backdrop-blur-md flex flex-col md:flex-row items-center gap-12 w-full">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 blur-[80px] rounded-full pointer-events-none"></div>
-
-              <div className="flex flex-col gap-4 md:w-1/2 relative z-10">
-                <h3 className="text-3xl font-black text-white tracking-tight leading-tight">
-                  What You'll Find In <br />My Case Studies
-                </h3>
-                <p className="text-slate-400 font-medium text-lg">
-                  A look under the hood at how the systems were designed, built, and deployed.
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-5 md:w-1/2 relative z-10 bg-black/20 p-8 rounded-3xl border border-white/5">
-                {caseStudyFeatures.map((item, i) => (
-                  <div key={i} className="flex items-center gap-4 text-slate-300">
-                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
-                      <item.icon size={16} className="text-blue-400" />
-                    </div>
-                    <span className="text-base font-bold">{item.text}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </ScrollReveal>
+        <section className="value-strip" aria-label="Core strengths">
+          <div><span className="value-strip__number">01</span><span>Product thinking</span></div>
+          <div><span className="value-strip__number">02</span><span>Backend engineering</span></div>
+          <div><span className="value-strip__number">03</span><span>Technical problem-solving</span></div>
+          <div><span className="value-strip__number">04</span><span>Independent execution</span></div>
         </section>
 
-        <section className="flex flex-col gap-8 w-full mt-16 max-w-5xl mx-auto">
-          <ScrollReveal>
-            <div className="flex flex-col gap-2 mb-8 text-center items-center">
-              <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight">
-                Engineering Philosophy
-              </h2>
-              <p className="text-slate-400 text-sm font-bold tracking-wide">
-                The principles driving my architecture decisions.
-              </p>
-            </div>
-          </ScrollReveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
-            {philosophyCards.map((phil, i) => (
-              <ScrollReveal key={i} delay={i * 100}>
-                <div className="bg-[#05070a]/80 border border-white/10 rounded-2xl p-6 hover:border-blue-500/50 transition-all duration-300 shadow-lg h-full">
-                  <h4 className="text-white font-bold text-lg mb-2">{phil.title}</h4>
-                  <p className="text-slate-400 text-sm leading-relaxed">{phil.desc}</p>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
+        <section id="work" className="work-section section-block">
+          <div className="section-topline"><SectionHeading eyebrow="Selected work · Independent builds" title="Ideas made tangible." description="A selection of products and engineering projects. Different problems, different systems—connected by the same approach: understand the need, design the mechanics, then make it work." /><div className="section-side-note"><span className="side-note__symbol">↗</span><span>Concept to<br />working product</span></div></div>
+          <div className="project-grid">{projects.map((project, index) => <ProjectCard key={project.name} project={project} index={index} />)}</div>
+          <div className="archive-banner"><div><span className="archive-banner__eyebrow">THE BROADER BODY OF WORK</span><h3>There's more behind the products.</h3><p>Explore technical experiments, architecture diagrams and implementation walkthroughs.</p></div><Link to="/lab" className="button-secondary">Open engineering archive <ArrowRight size={16} /></Link></div>
+          <div className="additional-grid">{additionalProjects.map((project, index) => <a key={project.name} href={project.url} target="_blank" rel="noreferrer" className="additional-project"><span className="additional-project__index">0{index + 7}</span><div><h3>{project.name} <ArrowUpRight size={14} /></h3><p>{project.description}</p><span>{project.stack}</span></div></a>)}</div>
         </section>
 
-        <section className="flex flex-col gap-8 w-full mt-16 max-w-4xl mx-auto">
-          <ScrollReveal>
-            <div className="flex flex-col gap-2 mb-4 text-center items-center">
-              <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight flex items-center justify-center gap-3">
-                <ShieldCheck className="text-emerald-400" size={28} /> Engineering Highlights
-              </h2>
-              <p className="text-slate-400 text-sm font-bold tracking-wide">Factual, verifiable technical achievements.</p>
-            </div>
-          </ScrollReveal>
-
-          <div className="flex flex-col gap-4 w-full">
-            {engineeringHighlights.map((highlight, index) => (
-              <ScrollReveal key={index} delay={index * 100}>
-                <Link to={highlight.link} target={highlight.link.startsWith('http') ? "_blank" : "_self"} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/[0.02] border border-white/5 p-5 md:p-6 rounded-2xl hover:bg-white/[0.04] hover:border-slate-500/30 transition-all duration-300 group">
-                  <div className="flex items-center gap-4">
-                    <Check size={18} className="text-emerald-500 shrink-0" />
-                    <span className="text-slate-200 text-base md:text-lg font-medium">{highlight.desc}</span>
-                  </div>
-                  <span className="text-slate-500 text-xs font-bold uppercase tracking-widest flex items-center gap-2 group-hover:text-blue-400 transition-colors whitespace-nowrap">
-                    {highlight.label} <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                  </span>
-                </Link>
-              </ScrollReveal>
-            ))}
-          </div>
+        <section className="approach-section section-block">
+          <div className="approach-intro"><SectionHeading eyebrow="How I add value" title="More than a feature. A working system." description="I enjoy the full engineering picture: how the pieces connect, what happens when something fails, and how the result behaves for the person using it." /><div className="approach-note"><Sparkles size={17} /><span>Business-aware. Technically hands-on.</span></div></div>
+          <div className="capability-grid">{capabilities.map(({ icon: Icon, number, title, text }) => <article className="capability-card" key={title}><div className="capability-card__top"><span>{number}</span><Icon size={19} /></div><h3>{title}</h3><p>{text}</p></article>)}</div>
+          <div className="process-line"><div><span>01</span><b>Understand</b><small>Clarify the real problem</small></div><i /><div><span>02</span><b>Architect</b><small>Design the right mechanics</small></div><i /><div><span>03</span><b>Build</b><small>Implement and test</small></div><i /><div><span>04</span><b>Ship</b><small>Deploy and improve</small></div></div>
         </section>
 
-        <section className="w-full mt-24 border-t border-slate-800/60 pt-16 pb-12 relative">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-blue-500/10 blur-[120px] rounded-full pointer-events-none z-0"></div>
-
-          <ScrollReveal className="relative z-10">
-            <div className="bg-[#05070a]/60 border border-white/10 rounded-[3rem] p-10 md:p-16 lg:p-24 flex flex-col items-center justify-center text-center gap-8 relative overflow-hidden backdrop-blur-xl shadow-[0_0_50px_rgba(0,0,0,0.5)] group">
-
-              <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f1a_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f1a_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)] opacity-30 group-hover:opacity-50 transition-opacity duration-1000 pointer-events-none"></div>
-
-              <div className="absolute top-0 left-0 w-64 h-64 bg-blue-500/10 blur-[80px] transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-10"></div>
-              <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-500/10 blur-[80px] transition-transform duration-1000 group-hover:-translate-x-10 group-hover:-translate-y-10"></div>
-
-              <div className="w-20 h-20 rounded-3xl bg-[#0a0f1a] border border-blue-500/30 flex items-center justify-center mb-2 relative z-10 shadow-[0_0_30px_rgba(59,130,246,0.2)] group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
-                <div className="absolute inset-0 bg-blue-500/10 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <Terminal size={32} className="text-blue-400 relative z-10" />
-              </div>
-
-              <div className="flex flex-col gap-6 relative z-10 w-full max-w-4xl mx-auto">
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.1]">
-                  I build systems where <br className="hidden lg:block" />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">architecture</span>, <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">engineering</span>, and product meet.
-                </h2>
-                <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-medium">
-                  Designed, architected, and implemented independently. Let's discuss your hardest engineering challenges.
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-8 w-full relative z-10">
-
-                <a href="mailto:soumikhlder@gmail.com" className="relative w-full sm:w-auto group/btn">
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl blur opacity-50 group-hover/btn:opacity-100 transition duration-500 group-hover/btn:duration-200"></div>
-                  <div className="relative w-full sm:w-auto px-10 py-4 bg-[#05070a] border border-white/10 text-white font-bold rounded-2xl transition-all flex items-center justify-center gap-3 text-base group-hover/btn:-translate-y-1">
-                    <Terminal size={18} className="text-blue-400 group-hover/btn:scale-110 transition-transform" /> Discuss a Technical Challenge
-                  </div>
-                </a>
-
-                <Link to="/journey" className="w-full sm:w-auto px-10 py-4 bg-white/[0.02] border border-white/10 hover:bg-white/[0.06] hover:border-white/30 text-white font-bold rounded-2xl transition-all shadow-lg text-center text-base flex items-center justify-center gap-3 backdrop-blur-md hover:-translate-y-1 group/link">
-                  Explore My Engineering Journey <ArrowRight size={18} className="text-slate-500 group-hover/link:text-white group-hover/link:translate-x-1 transition-all" />
-                </Link>
-              </div>
-            </div>
-          </ScrollReveal>
+        <section className="experience-section section-block">
+          <div className="section-topline"><SectionHeading eyebrow="Experience" title="Built through work, ownership and curiosity." description="Professional software roles, independent product development, business operations and programme coordination." /><Link to="/journey" className="text-link">Full professional journey <ArrowUpRight size={16} /></Link></div>
+          <div className="experience-list">{experience.map((item, index) => <article key={`${item.role}-${item.organisation}`} className="experience-row"><span className="experience-row__index">0{index + 1}</span><div className="experience-row__main"><h3>{item.role}</h3><p>{item.organisation}</p><small>{item.description}</small></div><time>{item.period}</time></article>)}</div>
         </section>
 
+        <section className="toolkit-section section-block">
+          <SectionHeading eyebrow="Technical toolkit" title="The tools behind the work." description="A practical selection of languages, frameworks and infrastructure used across my projects." />
+          <div className="toolkit-grid">{skillGroups.map((group) => <div className="toolkit-group" key={group.label}><h3>{group.label}</h3><div>{group.items.map((item) => <span key={item}>{item}</span>)}</div></div>)}</div>
+        </section>
+
+        <section className="contact-band">
+          <div className="contact-band__backdrop" aria-hidden="true" />
+          <div className="contact-band__copy"><p className="section-eyebrow">Open to the right opportunity</p><h2>Let's build something<br /><span>that works in the real world.</span></h2><p>For engineering roles, technical product support, backend systems or product development conversations, I'd be glad to connect.</p></div>
+          <div className="contact-band__actions"><a href="mailto:soumik.afterlife@gmail.com" className="button-primary button-primary--light"><Mail size={16} /> Start a conversation <ArrowUpRight size={16} /></a><a href="https://github.com/MrV3nomous" target="_blank" rel="noreferrer" className="button-secondary button-secondary--light"><Code2 size={16} /> GitHub profile</a></div>
+        </section>
+
+        <footer className="site-footer"><Link to="/" className="site-footer__brand"><img src="/me.png" alt="Soumik Halder" /> Soumik Halder</Link><p>Independent product engineering · Backend systems · APIs</p><div><a href="mailto:soumik.afterlife@gmail.com">Email</a><a href="tel:+919831191641">Call</a><a href="https://github.com/MrV3nomous" target="_blank" rel="noreferrer">GitHub</a><Link to="/journey">Experience</Link></div><small>© {new Date().getFullYear()} Soumik Halder</small></footer>
       </main>
     </div>
   );

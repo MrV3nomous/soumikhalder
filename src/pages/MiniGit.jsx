@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { 
-  ArrowLeft, Terminal, GitCommit, PlayCircle, X, ZoomIn, Hand, ChevronLeft, ChevronRight, 
-  Cpu, TerminalSquare, Command, CheckCircle2, ArrowRight, Database, Network, GitBranch, 
-  FileDigit, ArrowDown, ShieldCheck, Zap, Server, Code2, Download, Layers, Box, Lock
+  Terminal, GitCommit, PlayCircle, X, ChevronLeft, ChevronRight,
+  Cpu, TerminalSquare, Command, CheckCircle2, ArrowRight, Database, Network, GitBranch,
+  FileDigit, ShieldCheck, Server, Code2, Download, Lock
 } from 'lucide-react';
 import { projects } from '../data/projects';
 
@@ -20,8 +19,6 @@ export default function MiniGit() {
   const [panPosition, setPanPosition] = useState({ x: 0, y: 0 });
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
-  useEffect(() => { if (!isZoomed) setPanPosition({ x: 0, y: 0 }); }, [isZoomed]);
-
   const handleMouseDown = (e) => {
     if (!isZoomed) return;
     setIsDragging(true);
@@ -33,14 +30,53 @@ export default function MiniGit() {
     setPanPosition({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y });
   };
 
+  function handleNext(e) {
+    e?.stopPropagation();
+    setActiveIndex((prev) => (prev + 1) % allMedia.length);
+    setIsZoomed(false);
+    setPanPosition({ x: 0, y: 0 });
+  }
+
+  function handlePrev(e) {
+    e?.stopPropagation();
+    setActiveIndex((prev) => (prev - 1 + allMedia.length) % allMedia.length);
+    setIsZoomed(false);
+    setPanPosition({ x: 0, y: 0 });
+  }
+
+  useEffect(() => {
+    if (activeMedia) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = '';
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') setActiveIndex(null);
+      if (event.key === 'ArrowRight' && activeIndex !== null) {
+        setActiveIndex((prev) => (prev + 1) % allMedia.length);
+        setIsZoomed(false);
+        setPanPosition({ x: 0, y: 0 });
+      }
+      if (event.key === 'ArrowLeft' && activeIndex !== null) {
+        setActiveIndex((prev) => (prev - 1 + allMedia.length) % allMedia.length);
+        setIsZoomed(false);
+        setPanPosition({ x: 0, y: 0 });
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activeMedia, activeIndex, allMedia.length]);
+
   return (
-    <div className="flex flex-col gap-8 md:gap-12 pt-24 pb-24 animate-in fade-in duration-700 relative max-w-7xl mx-auto px-4 md:px-6">
+    <div className="portfolio-project-page portfolio-project-page--minigit flex flex-col gap-8 md:gap-12 pt-24 pb-24 animate-in fade-in duration-700 relative max-w-7xl mx-auto px-4 md:px-6">
       <style>{`
         .mgit-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
         .mgit-scroll::-webkit-scrollbar-track { background: transparent; }
         .mgit-scroll::-webkit-scrollbar-thumb { background: #065f46; border-radius: 10px; }
         .mgit-scroll::-webkit-scrollbar-thumb:hover { background: #10b981; }
       `}</style>
+      <a href="/lab" className="portfolio-page-backlink">← Engineering archive</a>
       <section className="flex flex-col gap-4">
         <div className="flex items-center gap-3 text-cyan-400 ml-2 mb-4 text-xs font-bold uppercase tracking-widest mb-2 bg-cyan-500/10 w-fit px-4 py-2 rounded-full border border-cyan-500/20 shadow-inner">
           <Terminal size={16} /> Version Control
@@ -428,7 +464,7 @@ export default function MiniGit() {
             {activeMedia.type === 'image' && (
               <div className="w-full h-full bg-white rounded-xl flex items-center justify-center overflow-hidden cursor-zoom-in shadow-2xl" 
                    onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={() => setIsDragging(false)} onTouchStart={() => setIsDragging(true)} onTouchEnd={() => setIsDragging(false)}
-                   onClick={() => setIsZoomed(!isZoomed)}>
+                   onClick={() => { if (isZoomed) setPanPosition({ x: 0, y: 0 }); setIsZoomed(!isZoomed); }}>
                 <img src={activeMedia.src} style={{ transform: `translate(${panPosition.x}px, ${panPosition.y}px) scale(${isZoomed ? 2.5 : 1})` }} className="mix-blend-multiply transition-transform max-w-full max-h-full object-contain pointer-events-none" />
               </div>
             )}

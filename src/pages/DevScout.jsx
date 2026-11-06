@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { Copy, Check,
-  ArrowLeft, X, ZoomIn, Hand, ChevronLeft, ChevronRight, 
-  Fingerprint, PlayCircle, LayoutGrid, Database, Terminal, 
+  X, ZoomIn, ChevronLeft, ChevronRight,
+  PlayCircle, LayoutGrid, Database, Terminal,
   LayoutDashboard, Swords, Radar, Sliders, Ticket, ShieldCheck, 
   FileCode2, Activity, Command, CheckCircle2, Layers, Wrench, 
-  Clock, Server, Cpu, BarChart3, AlertTriangle, Flame, ArrowRight, Network
+  Server, Cpu, BarChart3, AlertTriangle, Flame
 } from 'lucide-react';
 import { projects } from '../data/projects';
 
@@ -25,26 +24,44 @@ export default function DevScout() {
   const [panPosition, setPanPosition] = useState({ x: 0, y: 0 });
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
-  useEffect(() => { if (!isZoomed) setPanPosition({ x: 0, y: 0 }); }, [isZoomed]);
+  function handleNext(e) {
+    e?.stopPropagation();
+    setActiveIndex((prev) => (prev + 1) % allMedia.length);
+    setIsZoomed(false);
+    setPanPosition({ x: 0, y: 0 });
+  }
 
-  useEffect(() => {
-    if (activeMedia) document.body.style.overflow = 'hidden';
-    else { document.body.style.overflow = 'unset'; setIsZoomed(false); }
+  function handlePrev(e) {
+    e?.stopPropagation();
+    setActiveIndex((prev) => (prev - 1 + allMedia.length) % allMedia.length);
+    setIsZoomed(false);
+    setPanPosition({ x: 0, y: 0 });
+  }
 
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') setActiveIndex(null);
-      if (e.key === 'ArrowRight' && activeIndex !== null) handleNext(e);
-      if (e.key === 'ArrowLeft' && activeIndex !== null) handlePrev(e);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeMedia, activeIndex]);
-
-  const handleNext = (e) => { e?.stopPropagation(); setActiveIndex((prev) => (prev + 1) % allMedia.length); setIsZoomed(false); };
-  const handlePrev = (e) => { e?.stopPropagation(); setActiveIndex((prev) => (prev - 1 + allMedia.length) % allMedia.length); setIsZoomed(false); };
   const handleMouseDown = (e) => { if (!isZoomed) return; setIsDragging(true); setDragStart({ x: e.clientX - panPosition.x, y: e.clientY - panPosition.y }); };
   const handleMouseMove = (e) => { if (!isDragging || !isZoomed) return; setPanPosition({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y }); };
-  const handleMouseUp = () => setIsDragging(false);
+
+  useEffect(() => {
+    document.body.style.overflow = activeMedia ? 'hidden' : '';
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setActiveIndex(null);
+      if (e.key === 'ArrowRight' && activeIndex !== null) {
+        setActiveIndex((prev) => (prev + 1) % allMedia.length);
+        setIsZoomed(false);
+        setPanPosition({ x: 0, y: 0 });
+      }
+      if (e.key === 'ArrowLeft' && activeIndex !== null) {
+        setActiveIndex((prev) => (prev - 1 + allMedia.length) % allMedia.length);
+        setIsZoomed(false);
+        setPanPosition({ x: 0, y: 0 });
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activeMedia, activeIndex, allMedia.length]);
 
   const getIconForDiagram = (name) => {
     const n = name.toLowerCase();
@@ -66,7 +83,7 @@ export default function DevScout() {
     setTimeout(() => setCopiedItem(null), 2000);
   };
   return (
-    <div className="w-full flex flex-col text-slate-200 font-sans selection:bg-blue-500/30 overflow-x-hidden relative animate-in fade-in duration-700">
+    <div className="portfolio-project-page portfolio-project-page--devscout w-full flex flex-col text-slate-200 font-sans selection:bg-blue-500/30 overflow-x-hidden relative animate-in fade-in duration-700">
       
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/5 blur-[120px] rounded-full mix-blend-screen" />
@@ -76,6 +93,7 @@ export default function DevScout() {
       <main className="relative z-10 pt-24 pb-32 px-4 md:px-8 max-w-7xl mx-auto flex flex-col gap-20 w-full">
         
 
+        <a href="/lab" className="portfolio-page-backlink">← Engineering archive</a>
         <section className="flex flex-col items-center text-center mt-4 w-full max-w-5xl mx-auto gap-8">
           <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-blue-500/20 border border-blue-400/50 flex items-center justify-center shadow-[0_0_20px_rgba(37,99,235,0.3)] relative z-10 p-2">
             <img src="/devscoutlightlogo.png" alt="DevScout" className="w-full h-full object-contain opacity-90" />
@@ -438,7 +456,7 @@ export default function DevScout() {
                   Explore App Live
                 </a>
               )}
-              <a href="mailto:soumikhlder@gmail.com" className="px-8 py-3 bg-slate-800 border border-slate-700 hover:bg-slate-700 text-white font-bold rounded-full transition-colors shadow-lg hover:scale-105">
+              <a href="mailto:soumik.afterlife@gmail.com" className="px-8 py-3 bg-slate-800 border border-slate-700 hover:bg-slate-700 text-white font-bold rounded-full transition-colors shadow-lg hover:scale-105">
                 Let's Talk
               </a>
             </div>
